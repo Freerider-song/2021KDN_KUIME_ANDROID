@@ -4,11 +4,8 @@
 
     <uses-permission android:name="android.permission.BROADCAST_CLOSE_SYSTEM_DIALOGS" />
     <uses-permission android:name="android.permission.BROADCAST_CLOSE_SYSTEM_DIALOGS" />
-
     <uses-permission android:name="android.permission.BROADCAST_CLOSE_SYSTEM_DIALOGS" />
-
     <uses-permission android:name="android.permission.BROADCAST_CLOSE_SYSTEM_DIALOGS" />
-
     <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
 
     <application
@@ -19,6 +16,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Kuime.NoActionBar">
+        <activity android:name=".activity.ActivitySignUpComplete"></activity>
+        <activity android:name=".activity.ActivitySignUpCard" />
+        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.ActivitySignUpCar" />
+        <activity android:name=".activity.ActivitySignUp" />
+        <activity android:name=".activity.ActivityAuth" />
+        <activity android:name=".activity.ActivityHome" />
         <activity android:name=".activity.ActivitySplash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,9 +30,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ActivityLogin">
-
-        </activity>
+        <activity android:name=".ActivityLogin" />
     </application>
 
 </manifest>
