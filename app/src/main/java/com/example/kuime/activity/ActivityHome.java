@@ -1,7 +1,7 @@
 package com.example.kuime.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-
+import com.example.kuime.R;
 import android.os.Bundle;
 
 public class ActivityHome extends AppCompatActivity {

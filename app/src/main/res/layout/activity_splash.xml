@@ -8,12 +8,12 @@
     tools:context=".activity.ActivitySplash">
 
     <TextView
-        android:id="@+id/쿠이미"
+        android:id="@+id/tv_kuime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="쿠이미"
         android:textColor="@color/ks_gray"
-        android:textSize="24sp"
+        android:textSize="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,4 +29,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/alarm_icon" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

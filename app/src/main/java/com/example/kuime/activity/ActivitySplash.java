@@ -21,7 +21,7 @@ public class ActivitySplash extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        //nextIntent = new Intent(this, ActivityLogin.class);
+
         nextIntent = new Intent(this, ActivityLogin.class);
         splashThread = new Thread() {
             @Override

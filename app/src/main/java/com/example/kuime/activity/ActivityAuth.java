@@ -35,6 +35,7 @@ public class ActivityAuth extends AppCompatActivity implements IaResultHandler {
             case R.id.btn_next: {
                 Intent it = new Intent(this, ActivitySignUp.class);
                 startActivity(it);
+
             }
             break;
             case R.id.btn_auth: {

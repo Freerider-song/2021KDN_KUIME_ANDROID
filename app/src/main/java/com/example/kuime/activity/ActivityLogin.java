@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.example.kuime.activity.ActivityAuth;
+import com.example.kuime.activity.ActivityHome;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -42,7 +43,7 @@ public class ActivityLogin extends AppCompatActivity implements IaResultHandler{
         switch (v.getId()) {
             case R.id.btn_login: {
 
-                m_strMemberId = m_etUserId.getText().toString();
+               /* m_strMemberId = m_etUserId.getText().toString();
                 m_strPassword = m_etPassword.getText().toString();
 
                 if (m_strMemberId.isEmpty() || m_strPassword.isEmpty()) {
@@ -65,7 +66,9 @@ public class ActivityLogin extends AppCompatActivity implements IaResultHandler{
                     String m_dtToday = myyyyMMddFormat.format(calToday.getTime())+"1";
 
                     CaApplication.m_Engine.CheckBldLogin(m_strMemberId, m_strPassword, "android", CaApplication.m_Info.m_strPushId, m_dtToday, this, this);
-                }
+                }*/
+                Intent it = new Intent(this, ActivityHome.class);
+                startActivity(it);
             }
             break;
 

@@ -18,7 +18,6 @@
         android:theme="@style/Theme.Kuime.NoActionBar">
         <activity android:name=".activity.ActivitySignUpComplete"></activity>
         <activity android:name=".activity.ActivitySignUpCard" />
-        <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.ActivitySignUpCar" />
         <activity android:name=".activity.ActivitySignUp" />
         <activity android:name=".activity.ActivityAuth" />
