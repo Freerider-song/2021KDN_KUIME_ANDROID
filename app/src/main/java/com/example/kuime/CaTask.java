@@ -16,7 +16,7 @@ import org.json.JSONObject;
 
 public class CaTask extends AsyncTask<CaArg, Void, CaResult> {
 
-    private static final String m_strUrlApi  = "https://www.egservice.co.kr:7187/api/";
+    private static final String m_strUrlApi  = "https://electric-car-project.herokuapp.com/";
 
     private IaResultHandler m_ResultHandler;
     private Context m_Context;
@@ -24,6 +24,7 @@ public class CaTask extends AsyncTask<CaArg, Void, CaResult> {
     private SpinKitView m_Spinkit;
 
     private int m_nCallMethod;
+
     private boolean m_bShowWaitDialog;
 
     public CaTask(final int nCallMethod, final boolean bShowWaitDialog, Context C, IaResultHandler ResultHandler) {
@@ -31,6 +32,7 @@ public class CaTask extends AsyncTask<CaArg, Void, CaResult> {
         m_nCallMethod = nCallMethod;
         m_Context = C;
         m_ResultHandler = ResultHandler;
+
     }
 
     @Override

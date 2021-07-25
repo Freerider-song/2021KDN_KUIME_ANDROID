@@ -4,7 +4,7 @@ plugins {
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.0"
+    buildToolsVersion "30.0.2"
 
     defaultConfig {
         applicationId "com.example.kuime"
@@ -33,6 +33,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation 'org.jetbrains:annotations:15.0'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
@@ -59,4 +60,14 @@ dependencies {
 
     // Import Loading
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
+
+    // 구글 서비스
+    implementation 'com.google.android.gms:play-services-maps:17.0.1'
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
+
+    // 구글 맵 현재 위치
+    implementation 'com.google.android.material:material:1.4.0-alpha02'
+
+    //슬라이딩 페이지
+    //implementation 'com.sothree.slidinguppanel:library:3.4.0'
 }

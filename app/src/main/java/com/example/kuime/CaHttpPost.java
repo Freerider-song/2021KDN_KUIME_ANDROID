@@ -1,5 +1,4 @@
 package com.example.kuime;
-
 import android.graphics.Bitmap;
 import android.util.Log;
 import android.util.Pair;
@@ -31,11 +30,14 @@ import javax.net.ssl.X509TrustManager;
 
 public class CaHttpPost extends CaHttp{
 
+
     String attachmentName = "bitmap";
     String attachmentFileName = "";
     String crlf = "\r\n";
     String twoHyphens = "--";
     String boundary =  "*****";
+
+    String m_Method = "";
 
     public class TrivialTrustManager implements X509TrustManager {
         public void checkClientTrusted(X509Certificate[] chain, String authType)
@@ -67,6 +69,7 @@ public class CaHttpPost extends CaHttp{
     }
 
     public CaHttpPost(final String U) {
+
         setURI(U);
     }
 
@@ -100,9 +103,14 @@ public class CaHttpPost extends CaHttp{
 
             conn.setReadTimeout(15000);
             conn.setConnectTimeout(15000);
+            Log.i("CaHttpPost ", "Method="+m_Method);
+
+
             conn.setRequestMethod("POST");
-            conn.setDoInput(true);
             conn.setDoOutput(true);
+
+            conn.setDoInput(true);
+            //conn.setDoOutput(true);
 
             OutputStream os=conn.getOutputStream();
 
@@ -186,12 +194,14 @@ public class CaHttpPost extends CaHttp{
             HttpsURLConnection conn=(HttpsURLConnection)url.openConnection();
 
             Log.i("CaHttpPost ", "conn="+conn.toString());
-
+            Log.i("CaHttpPost ", "Method="+m_Method);
             conn.setUseCaches(false);
-            conn.setDoOutput(true);
+            //conn.setDoOutput(true); // 무조건 post로 바뀜
             conn.setDoInput(true);
 
             conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+
             conn.setRequestProperty("Connection", "Keep-Alive");
             conn.setRequestProperty("Cache-Control", "no-cache");
             conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + this.boundary);
@@ -283,12 +293,13 @@ public class CaHttpPost extends CaHttp{
             HttpsURLConnection conn=(HttpsURLConnection)url.openConnection();
 
             Log.i("CaHttpPost ", "conn="+conn.toString());
-
+            Log.i("CaHttpPost ", "Method="+m_Method);
             conn.setUseCaches(false);
-            conn.setDoOutput(true);
+            //conn.setDoOutput(true);
             conn.setDoInput(true);
-
             conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+
             conn.setRequestProperty("Connection", "Keep-Alive");
             conn.setRequestProperty("Cache-Control", "no-cache");
             conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + this.boundary);

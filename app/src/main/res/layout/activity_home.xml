@@ -7,7 +7,7 @@
     tools:context=".activity.ActivityHome">
 
     <Button
-        android:id="@+id/btn_search"
+        android:id="@+id/btn_map"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:backgroundTint="#00BCD4"
@@ -26,12 +26,12 @@
         android:text="홍길동님, 환영합니다"
         android:textColor="@color/ks_gray"
         android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="@+id/button2"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_menu"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/button2" />
+        app:layout_constraintTop_toTopOf="@+id/btn_menu" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/btn_menu"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginTop="30dp"
@@ -41,7 +41,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
+        android:id="@+id/cl_charge_page"
         android:layout_width="0dp"
         android:layout_height="300dp"
         android:layout_marginTop="50dp"
@@ -128,13 +128,14 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_charge_history"
         android:layout_width="0dp"
         android:layout_height="200dp"
         android:background="@drawable/shape_squared_corner_shadow"
         android:elevation="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+        app:layout_constraintTop_toBottomOf="@+id/cl_charge_page">
 
         <TextView
             android:id="@+id/textView16"
