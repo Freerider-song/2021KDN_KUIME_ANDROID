@@ -4,12 +4,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -42,7 +45,10 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -83,6 +89,7 @@ public class ActivityMap extends AppCompatActivity implements IaResultHandler, O
 
     private EditText etLocation;
     private Button btnSearch;
+    Fragment mapBottom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,21 +108,32 @@ public class ActivityMap extends AppCompatActivity implements IaResultHandler, O
 
         LatLng JEJU = new LatLng(33.505, 126.4681157);
 
+        //marker size 조절
+        int height = 150;
+        int width = 150;
+        BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.electricity_marker);
+        Bitmap b=bitmapdraw.getBitmap();
+        Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+
+
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(JEJU);
-        markerOptions.title("제주공항");
+        markerOptions.title("제주 애월 1 충전소");
         markerOptions.snippet("기본 위치");
+        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
         mMap.addMarker(markerOptions);
-
-
-        // 기존에 사용하던 다음 2줄은 문제가 있습니다.
-
-        // CameraUpdateFactory.zoomTo가 오동작하네요.
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(SEOUL));
-        //mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(JEJU, 18));
 
 
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(@NonNull @NotNull Marker marker) {
+                MapBottom bottomSheet = new MapBottom();
+                bottomSheet.show(getSupportFragmentManager(), "exampleBottomSheet");
+                return false;
+            }
+        });
+       //참조 https://codinginflow.com/tutorials/android/modal-bottom-sheet
     }
 
     public void onClick(View v) {

@@ -135,6 +135,8 @@ public class CaInfo {
     public String m_strPhoneSubscribing="";
 
 
+    public int nReserveType = 0;
+    public boolean bCarRegistered = false;
 
     /*
     public int m_nAuthType=CaEngine.AUTH_TYPE_UNKNOWN;

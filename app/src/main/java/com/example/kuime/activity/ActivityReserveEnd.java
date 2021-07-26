@@ -6,17 +6,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.kuime.CaApplication;
-import com.example.kuime.CaResult;
-import com.example.kuime.IaResultHandler;
 import com.example.kuime.R;
 
-public class ActivitySignUpCar extends AppCompatActivity implements IaResultHandler {
+public class ActivityReserveEnd extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up_car);
+        setContentView(R.layout.activity_reserve_end);
     }
 
     public void onClick(View v) {
@@ -27,8 +24,8 @@ public class ActivitySignUpCar extends AppCompatActivity implements IaResultHand
             }
             break;
             case R.id.btn_next: {
-                CaApplication.m_Info.bCarRegistered = true;
-                finish();
+                Intent it = new Intent(this, ActivityHome.class);
+                startActivity(it);
             }
             break;
 
@@ -36,14 +33,11 @@ public class ActivitySignUpCar extends AppCompatActivity implements IaResultHand
         }
     }
 
+
     @Override
     public void onBackPressed() {
         finish();
 
     }
 
-    @Override
-    public void onResult(CaResult Result) {
-
-    }
 }

@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <application
         android:name=".CaApplication"
         android:allowBackup="true"
@@ -17,7 +18,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Kuime.NoActionBar">
-        <activity android:name=".activity.ActivityMap"></activity>
+        <activity android:name=".activity.ActivityReserveEnd"></activity>
+        <activity android:name=".activity.ActivityReserveMin" />
+        <activity android:name=".activity.ActivityReserveTime" />
+        <activity android:name=".activity.ActivityReserveService" />
+        <activity android:name=".activity.ActivityReserveConnect" />
+        <activity android:name=".activity.ActivityReserveCharger" />
+        <activity android:name=".activity.ActivityMap" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
