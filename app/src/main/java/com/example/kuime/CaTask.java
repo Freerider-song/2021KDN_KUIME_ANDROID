@@ -6,7 +6,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.util.Pair;
-import android.widget.ProgressBar;
 
 import com.github.ybq.android.spinkit.SpinKitView;
 
@@ -24,7 +23,6 @@ public class CaTask extends AsyncTask<CaArg, Void, CaResult> {
     private SpinKitView m_Spinkit;
 
     private int m_nCallMethod;
-
     private boolean m_bShowWaitDialog;
 
     public CaTask(final int nCallMethod, final boolean bShowWaitDialog, Context C, IaResultHandler ResultHandler) {
@@ -32,7 +30,6 @@ public class CaTask extends AsyncTask<CaArg, Void, CaResult> {
         m_nCallMethod = nCallMethod;
         m_Context = C;
         m_ResultHandler = ResultHandler;
-
     }
 
     @Override

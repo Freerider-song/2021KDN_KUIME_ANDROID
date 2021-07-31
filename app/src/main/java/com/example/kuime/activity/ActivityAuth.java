@@ -2,20 +2,13 @@ package com.example.kuime.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.kuime.ActivityLogin;
-import com.example.kuime.CaApplication;
 import com.example.kuime.CaResult;
 import com.example.kuime.IaResultHandler;
 import com.example.kuime.R;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 public class ActivityAuth extends AppCompatActivity implements IaResultHandler {
 

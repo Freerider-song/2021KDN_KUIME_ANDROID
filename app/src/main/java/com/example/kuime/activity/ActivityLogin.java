@@ -49,7 +49,7 @@ public class ActivityLogin extends AppCompatActivity implements IaResultHandler{
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_login: {
-/*
+
                 m_strMemberId = m_etUserId.getText().toString();
                 m_strPassword = m_etPassword.getText().toString();
 
@@ -74,11 +74,9 @@ public class ActivityLogin extends AppCompatActivity implements IaResultHandler{
 
                     CaApplication.m_Engine.CheckLogin(m_strMemberId, m_strPassword, this, this);
                 }
-
-*/
-
-                Intent it = new Intent(this, ActivityHome.class);
-                startActivity(it);
+                
+                //Intent it = new Intent(this, ActivityHome.class);
+                //startActivity(it);
             }
             break;
 

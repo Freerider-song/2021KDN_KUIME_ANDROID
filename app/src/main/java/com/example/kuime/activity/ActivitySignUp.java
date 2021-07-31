@@ -26,7 +26,7 @@ public class ActivitySignUp extends AppCompatActivity implements IaResultHandler
             }
             break;
             case R.id.btn_next: {
-                Intent it = new Intent(this, ActivitySignUpCard.class);
+                Intent it = new Intent(this, ActivitySignUpCar.class);
                 startActivity(it);
             }
             break;

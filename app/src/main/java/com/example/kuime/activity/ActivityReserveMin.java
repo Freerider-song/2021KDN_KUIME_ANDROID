@@ -8,11 +8,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.example.kuime.R;
-
-import java.util.ArrayList;
 
 public class ActivityReserveMin extends AppCompatActivity {
 
