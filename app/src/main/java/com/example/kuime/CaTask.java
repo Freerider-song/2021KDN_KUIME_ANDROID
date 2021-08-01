@@ -83,7 +83,7 @@ public class CaTask extends AsyncTask<CaArg, Void, CaResult> {
                 for (Pair<String, String> A : arg.args) {
                     httpClient.addEntityPair(A);
                     Log.i("TASK","key="+A.first+", value="+A.second);
-                    ;                }
+                                   }
             }
 
             String strResponse;
@@ -96,11 +96,12 @@ public class CaTask extends AsyncTask<CaArg, Void, CaResult> {
                     strResponse = httpClient.execute(arg.bitmapList);
                 }
             } else{
+                Log.i("TASK", "일반 execute로 path 완성");
                 strResponse = httpClient.execute();
             }
 
             Log.i("TASK", "Command="+arg.command+", Response="+strResponse);
-            try {
+                try {
                 JSONObject jo = new JSONObject(strResponse);
 
                 Result = new CaResult();

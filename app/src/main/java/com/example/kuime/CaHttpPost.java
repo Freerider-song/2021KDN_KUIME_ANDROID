@@ -90,7 +90,11 @@ public class CaHttpPost extends CaHttp {
                 jo.put(A.first, A.second);
             }
 
-            URL url=new URL(m_strUri);
+
+            String strOutput=getPostDataString(jo);  // &id=1234&password=1234
+            Log.i("CaHttpPost ", "완성된 아웃풋="+strOutput);
+
+            URL url=new URL(m_strUri+strOutput);
 
             HttpsURLConnection conn=(HttpsURLConnection)url.openConnection();
 
@@ -106,8 +110,8 @@ public class CaHttpPost extends CaHttp {
 
             BufferedWriter writer=new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
 
-            String strOutput=getPostDataString(jo);
-            writer.write(strOutput);
+
+            //writer.write(strOutput);
 
             writer.flush();
             writer.close();

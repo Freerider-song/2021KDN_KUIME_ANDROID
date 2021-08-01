@@ -71,7 +71,7 @@ public class ActivityReserveCharger extends AppCompatActivity {
                 convertView = inflater.inflate(R.layout.list_item_charger, null);
 
                 holder.tvChargerName = convertView.findViewById(R.id.tv_charger_name);
-                holder.tvChargerUsed = convertView.findViewById(R.id.tv_charger_name2);
+                holder.tvChargerUsed = convertView.findViewById(R.id.tv_charge_used);
 
                 convertView.setTag(holder);
             }

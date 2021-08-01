@@ -1,35 +1,32 @@
 package com.example.kuime;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.DatePicker;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
-
-
+//import com.enernet.eg.building.R;
 
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
-public class EgYearMonthDayPicker extends Dialog {
+public class EgMonthPicker extends Dialog {
 
-    public DatePicker m_DatePicker;
     private TextView m_tvTitle;
     private Button m_BtnYes;
     private Button m_BtnNo;
     private String m_strTitle;
+
+    public NumberPicker m_npMonth;
+
     private View.OnClickListener m_ClickListenerYes;
     private View.OnClickListener m_ClickListenerNo;
 
-    public EgYearMonthDayPicker(Context ctx, String strTitle, View.OnClickListener ClickListenerYes, View.OnClickListener ClickListenerNo) {
+    public EgMonthPicker(Context ctx, String strTitle, View.OnClickListener ClickListenerYes, View.OnClickListener ClickListenerNo) {
         super(ctx, android.R.style.Theme_Translucent_NoTitleBar);
 
         m_strTitle=strTitle;
@@ -50,15 +47,20 @@ public class EgYearMonthDayPicker extends Dialog {
         setCancelable(false);
         getWindow().setGravity(Gravity.CENTER);
 
-        //setContentView(R.layout.eg_year_month_day_picker);
+        setContentView(R.layout.eg_month_picker);
 
-        //m_DatePicker=findViewById(R.id.date_picker);
+        Calendar cal = Calendar.getInstance();
 
-        //m_tvTitle = findViewById(R.id.dialog_text);
+        m_npMonth=findViewById(R.id.picker_month);
+        m_npMonth.setMinValue(1);
+        m_npMonth.setMaxValue(12);
+        m_npMonth.setValue(cal.get(Calendar.MONTH)+1);
+
+        m_tvTitle = findViewById(R.id.dialog_text);
         m_tvTitle.setText(m_strTitle);
 
-        //m_BtnYes = findViewById(R.id.btn_yes);
-        //m_BtnNo = findViewById(R.id.btn_no);
+        m_BtnYes = findViewById(R.id.btn_yes);
+        m_BtnNo = findViewById(R.id.btn_no);
 
         if (m_ClickListenerYes != null) {
             m_BtnYes.setOnClickListener(m_ClickListenerYes);
@@ -68,10 +70,5 @@ public class EgYearMonthDayPicker extends Dialog {
             m_BtnNo.setOnClickListener(m_ClickListenerNo);
         }
 
-
-
     }
-
-
-
 }

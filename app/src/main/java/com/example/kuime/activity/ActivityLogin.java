@@ -44,12 +44,23 @@ public class ActivityLogin extends AppCompatActivity implements IaResultHandler{
 
         m_etUserId = findViewById(R.id.input_id);
         m_etPassword = findViewById(R.id.input_pw);
+
+        String savedLoginId = m_Pref.getValue(CaPref.PREF_MEMBER_ID, "");
+        if (!savedLoginId.equals("")) {
+            m_etUserId.setText(savedLoginId);
+        }
+
+        String savedPassword = m_Pref.getValue(CaPref.PREF_PASSWORD, "");
+        if (!savedPassword.equals("")) {
+            m_etPassword.setText(savedPassword);
+        }
+
     }
 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_login: {
-
+/*
                 m_strMemberId = m_etUserId.getText().toString();
                 m_strPassword = m_etPassword.getText().toString();
 
@@ -74,9 +85,9 @@ public class ActivityLogin extends AppCompatActivity implements IaResultHandler{
 
                     CaApplication.m_Engine.CheckLogin(m_strMemberId, m_strPassword, this, this);
                 }
-                
-                //Intent it = new Intent(this, ActivityHome.class);
-                //startActivity(it);
+                */
+                Intent it = new Intent(this, ActivityHome.class);
+                startActivity(it);
             }
             break;
 

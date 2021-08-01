@@ -45,17 +45,20 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
             break;
 
             case R.id.btn_menu: {
-
+                Intent it = new Intent(this, ActivityMyPage.class);
+                startActivity(it);
             }
             break;
 
             case R.id.cl_charge_history: {
-
+                Intent it = new Intent(this, ActivityChargeHistory.class);
+                startActivity(it);
             }
             break;
 
             case R.id.cl_charge_page: {
-
+                Intent it = new Intent(this, ActivityCharge.class);
+                startActivity(it);
             }
             break;
 

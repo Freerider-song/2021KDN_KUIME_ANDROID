@@ -1,6 +1,7 @@
 package com.example.kuime;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.util.Pair;
 
 import org.json.JSONObject;
@@ -54,7 +55,7 @@ public abstract class CaHttp {
     public String getPostDataString(JSONObject jo) throws Exception {
         StringBuilder result=new StringBuilder();
         boolean bFirst=true;
-
+        Log.i("Http", "getPostDataString 실행");
         Iterator<String> itr=jo.keys();
 
         while (itr.hasNext()) {
