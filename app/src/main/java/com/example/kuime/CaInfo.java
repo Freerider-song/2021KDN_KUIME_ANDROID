@@ -47,52 +47,7 @@ public class CaInfo {
     public Date m_dtCreated=null;
     public Date m_dtModified=null;
     public Date m_dtChangePassword =null;
-    public int m_nSeqTeam=0;
-    public String m_strTeamName="";
-    public boolean m_bNotiAll=true;
-    public boolean m_bNotiKwh=true;
-    public boolean m_bNotiWon=true;
-    public boolean m_bNotiSavingStandard=true;
-    public boolean m_bNotiSavingGoal=true;
-    public boolean m_bNotiUsageAtTime=true;
-    public double m_dThresholdThisMonthKwh=0.0;
-    public double m_dThresholdThisMonthWon=0.0;
-    public int m_nHourNotiThisMonthUsage=0;
 
-    public int m_nSeqSite = 0;
-    public int m_nSiteType=0;
-    public String m_strSiteName="";
-    public int m_nBuiltYear=0;
-    public int m_nBuiltMonth=0;
-    public String m_strFloorInfo="";
-    public String m_strHomePage="";
-    public String m_strSiteFax="";
-    public String m_strSitePhone="";
-    public String m_strSiteAddress="";
-    public double m_dSiteDx=0.0;
-    public double m_dSiteDy=0.0;
-    public double m_dKwContracted=0.0;
-    public int m_nReadDay=0;
-    public int m_nSeqSavePlanActive=0;
-
-    public int m_nSeqSavePlan=0;
-    public int m_nSeqSaveRef=0;
-    public String m_strSavePlanName ="";
-    public String m_strSaveRefName = "";
-    public double m_dSaveKwhTotalFromElem=0.0;
-    public double m_dSaveWonTotalFromElem=0.0;
-    public double m_dSaveKwhTotalFromMeter=0.0;
-    public double m_dSaveWonTotalFromMeter=0.0;
-    public double m_dKwhRefForAllMeter=0.0;
-    public double m_dKwhPlanForAllMeter=0.0;
-    public double m_dKwhRealForAllMeter=0.0;
-    public double m_dWonRefForAllMeter=0.0;
-    public double m_dWonPlanForAllMeter=0.0;
-    public double m_dWonRealForAllMeter=0.0;
-    public Date m_dtSavePlanCreated= null;
-    public Date m_dtSavePlanEnded= null;
-    public int m_nActCount = 0;
-    public int m_nActCountWithHistory=0;
 
     //
     // GetSaveResult
@@ -101,20 +56,14 @@ public class CaInfo {
     public double m_dAvgKwhForAllMeter=0.0;
     public double m_dAvgWonForAllMeter=0.0;
 
+    public String strId="";
+    public String strPassword="";
+    public String strName = "";
 
+    public String strCarCompany = "";
+    public String strCarModel = "";
+    public int nModelId = 0;
 
-
-
-    public int m_nSeqMember=0;
-    public int m_nSeqProjectSelected=0;
-    public int m_nMemberType=0;
-    public String m_strAdminId="";
-    public String m_strPassword="";
-    public String m_strMemberName="";
-    public String m_strMemberPhone="";
-    public String m_strMemberMail="";
-    public String m_strMemberCompany="";
-    public String m_strMemberRank="";
 
 
 

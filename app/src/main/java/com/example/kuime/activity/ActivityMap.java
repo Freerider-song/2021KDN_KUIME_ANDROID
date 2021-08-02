@@ -19,6 +19,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
+import android.util.JsonReader;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -27,9 +28,12 @@ import android.widget.Toast;
 
 import com.example.kuime.ActivityLogin;
 import com.example.kuime.CaApplication;
+import com.example.kuime.CaEngine;
+import com.example.kuime.CaPref;
 import com.example.kuime.CaResult;
 import com.example.kuime.IaResultHandler;
 import com.example.kuime.R;
+import com.example.kuime.model.CaStation;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -49,17 +53,24 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+
+import static com.example.kuime.CaApplication.m_Context;
 
 public class ActivityMap extends AppCompatActivity implements IaResultHandler, OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback {
 
     private GoogleMap mMap;
     private Marker currentMarker = null;
+    public ArrayList<CaStation> alStation = new ArrayList<>();
 
     private static final String TAG = "googlemap_example";
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
@@ -96,6 +107,7 @@ public class ActivityMap extends AppCompatActivity implements IaResultHandler, O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
+        CaApplication.m_Engine.GetStationInfo(this,this);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -191,6 +203,52 @@ public class ActivityMap extends AppCompatActivity implements IaResultHandler, O
 
     @Override
     public void onResult(CaResult Result) {
+        if (Result.object == null) {
+            Toast.makeText(m_Context, "Check Network", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        switch (Result.m_nCallback) {
+            case CaEngine.GET_STATION_INFO: {
+
+                try {
+                    JSONObject jo = Result.object;
+                    JSONArray ja = jo.getJSONArray("features");
+
+                    alStation.clear();
+
+                    for(int i=0;i<ja.length();i++){
+                        JSONObject joStation = ja.getJSONObject(i);
+                        CaStation station = new CaStation();
+                        JSONArray jaGeometry = joStation.getJSONArray("geometry");
+                        JSONArray jaProperties = joStation.getJSONArray("properties");
+
+                        JSONObject joGeometry = jaGeometry.getJSONObject(0);
+                        JSONArray jaDxy =joGeometry.getJSONArray("coordinates");
+                        station.dx = jaDxy.getDouble(0);
+                        station.dy = jaDxy.getDouble(1);
+
+                        JSONObject joProperties = jaProperties.getJSONObject(0);
+                        station.nFastCharger = joProperties.getInt("fast_charger");
+                        station.nSlowCharger = joProperties.getInt("slow_charger");
+                        station.nStationId = joProperties.getInt("station_id");
+                        station.strStationName = joProperties.getString("station_name");
+
+                        alStation.add(station);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            break;
+
+            default: {
+                //Log.i(TAG, "Unknown type result received");
+            }
+            break;
+
+        }
 
     }
 

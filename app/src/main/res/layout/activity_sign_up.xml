@@ -27,8 +27,8 @@
         android:text="비밀번호"
         android:textColor="@color/ks_gray"
         android:textSize="20dp"
-        app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName3"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName3" />
+        app:layout_constraintStart_toStartOf="@+id/et_id"
+        app:layout_constraintTop_toBottomOf="@+id/et_id" />
 
     <Button
         android:id="@+id/btn_back"
@@ -73,7 +73,7 @@
         app:layout_constraintTop_toBottomOf="@+id/btn_next" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName3"
+        android:id="@+id/et_id"
         android:layout_width="281dp"
         android:layout_height="50dp"
         android:layout_marginTop="20dp"
@@ -85,7 +85,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName4"
+        android:id="@+id/et_password"
         android:layout_width="281dp"
         android:layout_height="50dp"
         android:layout_marginTop="20dp"
@@ -98,7 +98,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName5"
+        android:id="@+id/et_password_check"
         android:layout_width="281dp"
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
@@ -108,16 +108,16 @@
         android:textColor="@color/ks_gray"
         android:textSize="20dp"
         app:layout_constraintStart_toStartOf="@+id/textView8"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName4" />
+        app:layout_constraintTop_toBottomOf="@+id/et_password" />
 
     <TextView
-        android:id="@+id/textView10"
+        android:id="@+id/tv_check"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:text="비밀번호가 일치하지 않습니다"
         android:textColor="@color/bright_red"
-        app:layout_constraintEnd_toEndOf="@+id/editTextTextPersonName5"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName5" />
+        app:layout_constraintEnd_toEndOf="@+id/et_password_check"
+        app:layout_constraintTop_toBottomOf="@+id/et_password_check" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

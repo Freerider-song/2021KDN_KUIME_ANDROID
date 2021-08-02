@@ -28,19 +28,8 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_map: {
-
-                if(CaApplication.m_Info.bCarRegistered){
                     Intent it = new Intent(this, ActivityMap.class);
                     startActivity(it);
-                }
-                else{
-                    Intent it = new Intent(this, ActivitySignUpCar.class);
-                    startActivity(it);
-
-                }
-
-
-
             }
             break;
 

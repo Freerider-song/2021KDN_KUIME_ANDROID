@@ -11,26 +11,12 @@ public class CaEngine {
 
     //API 요청
     public static final int CB_CHECK_BLD_LOGIN = 1001;
-    public static final int CB_GET_BLD_ADMIN_INFO = 1002;
-    public static final int CB_CHANGE_ADMIN_PASSWORD = 1003;
-    public static final int CB_REQUEST_AUTH_CODE = 1004;
-    public static final int CB_CHECK_AUTH_CODE = 1005;
-    public static final int CB_CHECK_ADMIN_CANDIDATE = 1006;
-    public static final int CB_GET_ADMIN_USAGE_CURRENT = 1007;
-    public static final int CB_GET_ADMIN_ALARM_LIST = 1008;
-    public static final int CB_GET_BLD_NOTICE_LIST = 1009;
-    public static final int CB_SET_BLD_NOTICE_AS_READ = 1010;
-    public static final int CB_GET_SAVE_RESULT_DAILY = 1011;
-    public static final int CB_GET_SAVE_RESULT = 1012;
-    public static final int CB_GET_USAGE_FOR_ALL_METER_DAY = 1013;
-    public static final int CB_GET_USAGE_FOR_ALL_METER_MONTH = 1014;
-    public static final int CB_GET_USAGE_FOR_ALL_METER_YEAR = 1015;
-    public static final int CB_CHANGE_ADMIN_BLD_SETTINGS= 1016;
-    public static final int CB_GET_BLD_ALARM_LIST=1017;
-    public static final int CB_SET_SAVE_ACT_BEGIN = 1018;
-    public static final int CB_SET_SAVE_ACT_END = 1019;
-    public static final int CB_GET_UNREAD_BLD_NOTICE_COUNT = 1020;
-    public static final int CB_GET_UNREAD_BLD_ALARM_COUNT = 1021;
+    public static final int GET_CAR_COMPANY_INFO = 1002;
+    public static final int GET_CAR_MODEL_INFO = 1003;
+    public static final int SET_SIGN_UP_INFO= 1004;
+    public static final int GET_STATION_INFO = 1005;
+
+
 
 
 
@@ -96,6 +82,44 @@ public class CaEngine {
 
         executeCommand(Arg, CB_CHECK_BLD_LOGIN, false, true, Ctx, ResultHandler);
     }
+
+    public void GetCarCompanyInfo(Context Ctx, IaResultHandler ResultHandler){
+        Log.i("ENGINE", "GetCarCompanyInfo called");
+
+        CaArg Arg = new CaArg("GetCarCompanyInfo", NO_CMD_ARGS, null);
+
+        executeCommand(Arg, GET_CAR_COMPANY_INFO, false, true, Ctx, ResultHandler);
+    }
+
+    public void GetCarModelInfo(String CarCompany, Context Ctx, IaResultHandler ResultHandler){
+        Log.i("ENGINE", "GetCarModelInfo called");
+
+        CaArg Arg = new CaArg("GetCarModelInfo", NO_CMD_ARGS, null);
+        Arg.addArg("Car_company", CarCompany);
+
+        executeCommand(Arg, GET_CAR_MODEL_INFO, false, true, Ctx, ResultHandler);
+    }
+
+    public void SetSignUpInfo(String Name, String Id,String Password,int CarModelId,Context Ctx, IaResultHandler ResultHandler){
+        Log.i("ENGINE", "GetCarModelInfo called");
+
+        CaArg Arg = new CaArg("GetCarModelInfo", NO_CMD_ARGS, null);
+        Arg.addArg("Car_model", CarModelId);
+        Arg.addArg("Name", Name);
+        Arg.addArg("Id", Id);
+        Arg.addArg("Password", Password);
+
+        executeCommand(Arg, SET_SIGN_UP_INFO, false, true, Ctx, ResultHandler);
+    }
+
+    public void GetStationInfo(Context Ctx, IaResultHandler ResultHandler){
+        Log.i("ENGINE", "GetStationInfo called");
+
+        CaArg Arg = new CaArg("GetStationInfo", NO_CMD_ARGS, null);
+
+        executeCommand(Arg, GET_STATION_INFO, false, true, Ctx, ResultHandler);
+    }
+
 
 
 }
