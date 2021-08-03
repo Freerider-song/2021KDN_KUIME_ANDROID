@@ -117,9 +117,6 @@ public class ActivityMap extends AppCompatActivity implements IaResultHandler, O
     public void onMapReady(final GoogleMap googleMap) {
 
         mMap = googleMap;
-
-        LatLng JEJU = new LatLng(33.505, 126.4681157);
-
         //marker size 조절
         int height = 150;
         int width = 150;
@@ -127,20 +124,32 @@ public class ActivityMap extends AppCompatActivity implements IaResultHandler, O
         Bitmap b=bitmapdraw.getBitmap();
         Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
 
-
         MarkerOptions markerOptions = new MarkerOptions();
+        LatLng JEJU = new LatLng(33.505, 126.4681157);
         markerOptions.position(JEJU);
         markerOptions.title("제주 애월 1 충전소");
         markerOptions.snippet("기본 위치");
         markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
         mMap.addMarker(markerOptions);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(JEJU, 18));
 
+        for(int i = 0; i<alStation.size(); i++){
+            CaStation station = alStation.get(i);
+            markerOptions
+                    .position(new LatLng(station.dx, station.dy))
+                    .title(station.strStationName)
+                    .snippet("급속 "+station.nFastCharger + " 완속 " + station.nSlowCharger);
+            mMap.addMarker(markerOptions);
+        }
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(JEJU, 18));
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(@NonNull @NotNull Marker marker) {
                 MapBottom bottomSheet = new MapBottom();
+                Bundle bundle = new Bundle();
+                bundle.putString("station_name", marker.getTitle());
+                bundle.putString("charger_num", marker.getSnippet());
+                bottomSheet.setArguments(bundle);
                 bottomSheet.show(getSupportFragmentManager(), "exampleBottomSheet");
                 return false;
             }

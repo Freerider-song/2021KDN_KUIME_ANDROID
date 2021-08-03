@@ -10,7 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
+import com.example.kuime.CaApplication;
 import com.example.kuime.R;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
@@ -34,15 +36,7 @@ public class MapBottom extends BottomSheetDialogFragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MapBottom.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static MapBottom newInstance(String param1, String param2) {
         MapBottom fragment = new MapBottom();
         Bundle args = new Bundle();
@@ -56,8 +50,7 @@ public class MapBottom extends BottomSheetDialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
     }
 
@@ -67,11 +60,23 @@ public class MapBottom extends BottomSheetDialogFragment {
         // Inflate the layout for this fragment
         ViewGroup rootView = (ViewGroup)inflater.inflate(R.layout.fragment_map_bottom, container, false);
         Button btnReserve = rootView.findViewById(R.id.btn_reserve);
+        mParam1 = getArguments().getString("station_name");
+        mParam2 = getArguments().getString("charger_num");
+
+        TextView tvStationName = rootView.findViewById(R.id.tv_station_name);
+        TextView tvStationCharger = rootView.findViewById(R.id.tv_station_charger);
+
+        tvStationCharger.setText(mParam2);
+        tvStationName.setText(mParam1);
+
 
         btnReserve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.i("MapBottom", "move to home");
+                CaApplication.m_Info.strStationName = mParam1;
+                CaApplication.m_Info.nFastCharger = Integer.parseInt(mParam2.substring(3,4));
+                CaApplication.m_Info.nSlowCharger = Integer.parseInt(mParam2.substring(8,9));
                 Intent it = new Intent(getActivity(), ActivityReserveCharger.class);
                 startActivity(it);
             }

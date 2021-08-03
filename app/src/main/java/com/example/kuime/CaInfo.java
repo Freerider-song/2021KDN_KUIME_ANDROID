@@ -64,6 +64,25 @@ public class CaInfo {
     public String strCarModel = "";
     public int nModelId = 0;
 
+    public String strStationName = "";
+    public int nFastCharger = 0;
+    public int nSlowCharger = 0;
+
+    public String strChargerName = "";
+
+    public int nCurrentCapacity = 0;
+    public int nMinCapacity = 0;
+
+    public double dBatteryCapacity = 0.0;
+    public double dEfficiency = 0.1;
+
+    public int nServiceType = 0; //1=충전, 2=방전, 3=충/방전
+    public int bBeingCharged = -1;
+
+    public Date dtStart = null;
+    public Date dtEnd = null;
+
+
 
 
 

@@ -13,10 +13,14 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.kuime.CaApplication;
 import com.example.kuime.R;
+import com.example.kuime.model.CaCharger;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Random;
 
 public class ActivityReserveCharger extends AppCompatActivity {
 
@@ -26,6 +30,8 @@ public class ActivityReserveCharger extends AppCompatActivity {
 
     Calendar calToday = Calendar.getInstance();
     String m_dtToday = myyyyMMddFormat.format(calToday.getTime());
+
+    ArrayList<CaCharger> alCharger = new ArrayList<>();
 
 
     private class ChargerViewHolder {
@@ -45,14 +51,14 @@ public class ActivityReserveCharger extends AppCompatActivity {
         @Override
         public int getCount() {
 
-            //return plan.m_alAct.size();
-            return 3;
+            return alCharger.size();
+
         }
 
         @Override
         public Object getItem(int position) {
             //return plan.m_alAct.get(position);
-            return position;
+            return alCharger.get(position);
 
         }
 
@@ -80,52 +86,42 @@ public class ActivityReserveCharger extends AppCompatActivity {
             }
 
 
-            /*
-            final CaAct act = plan.m_alAct.get(position);
-            holder.m_CheckBox.setText(act.m_strActContent);
 
+            final CaCharger charger= alCharger.get(position);
 
-            boolean flag = false;
-
-            for(int i=0;i<act.m_alActHistory.size();i++){
-                CaActHistory actHistory = act.m_alActHistory.get(i);
-
-                if(m_dtToday.equals(myyyyMMddFormat.format(actHistory.m_dtBegin))){
-                    holder.m_CheckBox.setChecked(true);
-                    flag = true;
-                    break;
-                }
+            holder.tvChargerName.setText(charger.strChargerName);
+            if(charger.bUsed){
+                holder.tvChargerUsed.setVisibility(View.VISIBLE);
             }
-
-            if(flag==false) holder.m_CheckBox.setChecked(false);
-
-
-            holder.m_CheckBox.setOnClickListener(new CheckBox.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (((CheckBox)v).isChecked()) {
-                        CaApplication.m_Engine.SetSaveActBegin(act.m_nSeqAct,CaApplication.m_Info.m_nSeqAdmin, m_dtToday, getApplicationContext(),ActivityAlarm.this);
-                    } else {
-                        // TODO : CheckBox is unchecked.
-                    }
-                }
-            }) ;
-
-            if(holder.m_CheckBox.isChecked()){
-                holder.m_CheckBox.setClickable(false);
+            else{
+                holder.tvChargerUsed.setVisibility(View.INVISIBLE);
             }
-
-             */
-
-
 
             return convertView;
         }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reserve_charger);
+
+        int nCount = CaApplication.m_Info.nFastCharger + CaApplication.m_Info.nSlowCharger;
+
+        Random random = new Random();
+        CaCharger charger = new CaCharger();
+
+        for(int i=0; i<CaApplication.m_Info.nFastCharger; i++){
+            charger.strChargerName = Integer.toString(i+1)+"충전기 (급속)";
+            charger.bUsed = random.nextBoolean();
+            alCharger.add(charger);
+        }
+        for(int i=CaApplication.m_Info.nFastCharger; i<nCount; i++){
+
+            charger.strChargerName = Integer.toString(i+1)+"충전기 (완속)";
+            charger.bUsed = random.nextBoolean();
+            alCharger.add(charger);
+        }
 
         ListView listView = findViewById(R.id.lv_charger);
 
@@ -142,13 +138,9 @@ public class ActivityReserveCharger extends AppCompatActivity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // adapter.getItem(position)의 return 값은 Object 형
-                // 실제 Item의 자료형은 CustomDTO 형이기 때문에
-                // 형변환을 시켜야 getResId() 메소드를 호출할 수 있습니다.
-
+                final CaCharger charger= alCharger.get(position);
                 Intent intent = new Intent(ActivityReserveCharger.this, ActivityReserveConnect.class);
-                // putExtra(key, value)
-                //intent.putExtra("imgRes", imgRes);
+                CaApplication.m_Info.strChargerName = charger.strChargerName;
                 startActivity(intent);
             }
         });

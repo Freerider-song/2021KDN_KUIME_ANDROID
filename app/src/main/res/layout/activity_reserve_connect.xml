@@ -7,7 +7,7 @@
     tools:context=".activity.ActivityReserveConnect">
 
     <TextView
-        android:id="@+id/textView23"
+        android:id="@+id/tv_station_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
@@ -22,7 +22,7 @@
         app:layout_constraintTop_toBottomOf="@+id/btn_back" />
 
     <TextView
-        android:id="@+id/textView24"
+        android:id="@+id/tv_charger_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -34,7 +34,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView23" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_station_name" />
 
     <TextView
         android:id="@+id/textView25"
@@ -99,7 +99,7 @@
         android:layout_marginTop="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView24"
+        app:layout_constraintTop_toBottomOf="@+id/tv_charger_name"
         app:srcCompat="@drawable/car_connect" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
