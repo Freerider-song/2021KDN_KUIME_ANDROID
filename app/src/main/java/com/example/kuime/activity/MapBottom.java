@@ -77,6 +77,7 @@ public class MapBottom extends BottomSheetDialogFragment {
                 CaApplication.m_Info.strStationName = mParam1;
                 CaApplication.m_Info.nFastCharger = Integer.parseInt(mParam2.substring(3,4));
                 CaApplication.m_Info.nSlowCharger = Integer.parseInt(mParam2.substring(8,9));
+                CaApplication.m_Info.nV2gCharger = Integer.parseInt(mParam2.substring(14,15));
                 Intent it = new Intent(getActivity(), ActivityReserveCharger.class);
                 startActivity(it);
             }

@@ -32,17 +32,38 @@ public class ActivityCharge extends AppCompatActivity implements IaResultHandler
     private Marker currentMarker = null;
     public CircleProgressBar pbBattery;
 
+    Date mNow;
+    SimpleDateFormat mFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+    CaPref m_Pref;
+
+    TextView tvFee, tvStation, tvCompleteUntil, tvEfficiency;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_charge);
+
+        m_Context = getApplicationContext();
+        m_Pref = new CaPref(m_Context);
+        mNow = new Date(System.currentTimeMillis());
+
+
+        int nCurrentCap = m_Pref.getValue(PREF_CURRENT_CAP, 45);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
         pbBattery = findViewById(R.id.pb_battery);
-        pbBattery.setProgress(60);
+        pbBattery.setProgress(nCurrentCap);
+
+        tvFee = findViewById(R.id.tv_fee);
+        tvStation = findViewById(R.id.tv_station);
+        tvCompleteUntil = findViewById(R.id.tv_complete_until);
+        tvEfficiency = findViewById(R.id.tv_efficiency);
+
+        tvFee.setText(CaApplication.m_Info.m_dfWon.format(CaApplication.m_Info.nExpectedFee * CaApplication.m_Info.dReserveTimeRatio));
     }
 
     @Override
@@ -50,7 +71,7 @@ public class ActivityCharge extends AppCompatActivity implements IaResultHandler
 
         mMap = googleMap;
 
-        LatLng Station = new LatLng(33.505, 126.4681157);
+        LatLng Station = new LatLng(CaApplication.m_Info.dDx, CaApplication.m_Info.dDy);
 
         //marker size 조절
         int height = 150;
@@ -62,21 +83,10 @@ public class ActivityCharge extends AppCompatActivity implements IaResultHandler
 
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(Station);
-        markerOptions.title("제주 애월 1 충전소");
+        markerOptions.title(CaApplication.m_Info.strStationName);
         markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
         mMap.addMarker(markerOptions);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Station, 18));
-
-
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(@NonNull @NotNull Marker marker) {
-                MapBottom bottomSheet = new MapBottom();
-                bottomSheet.show(getSupportFragmentManager(), "exampleBottomSheet");
-                return false;
-            }
-        });
-        //참조 https://codinginflow.com/tutorials/android/modal-bottom-sheet
 
     }
 

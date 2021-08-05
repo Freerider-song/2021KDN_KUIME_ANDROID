@@ -77,12 +77,9 @@ public class ActivityMap extends AppCompatActivity implements IaResultHandler, O
     private static final int UPDATE_INTERVAL_MS = 1000;  // 1초
     private static final int FASTEST_UPDATE_INTERVAL_MS = 500; // 0.5초
 
-    // onRequestPermissionsResult에서 수신된 결과에서 ActivityCompat.requestPermissions를 사용한 퍼미션 요청을 구별하기 위해 사용됩니다.
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     boolean needRequest = false;
 
-
-    // 앱을 실행하기 위해 필요한 퍼미션을 정의합니다.
     String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};  // 외부 저장소
 
 
@@ -137,7 +134,7 @@ public class ActivityMap extends AppCompatActivity implements IaResultHandler, O
             markerOptions
                     .position(new LatLng(station.dx, station.dy))
                     .title(station.strStationName)
-                    .snippet("급속 "+station.nFastCharger + " 완속 " + station.nSlowCharger);
+                    .snippet("급속 "+station.nFastCharger + " 완속 " + station.nSlowCharger + " V2G " + station.nV2gCharger);
             mMap.addMarker(markerOptions);
         }
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(JEJU, 18));
@@ -242,6 +239,7 @@ public class ActivityMap extends AppCompatActivity implements IaResultHandler, O
                         station.nSlowCharger = joProperties.getInt("slow_charger");
                         station.nStationId = joProperties.getInt("station_id");
                         station.strStationName = joProperties.getString("station_name");
+                        station.nV2gCharger = joProperties.getInt("v2g_charger");
 
                         alStation.add(station);
                     }

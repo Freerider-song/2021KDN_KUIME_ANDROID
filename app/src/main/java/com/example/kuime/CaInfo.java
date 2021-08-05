@@ -67,43 +67,30 @@ public class CaInfo {
     public String strStationName = "";
     public int nFastCharger = 0;
     public int nSlowCharger = 0;
+    public int nV2gCharger = 0;
+
+    public double dReserveTimeRatio = 0.1;
 
     public String strChargerName = "";
 
-    public int nCurrentCapacity = 0;
+    //public int nCurrentCapacity = 0;
     public int nMinCapacity = 0;
 
     public double dBatteryCapacity = 0.0;
     public double dEfficiency = 0.1;
 
-    public int nServiceType = 0; //1=충전, 2=방전, 3=충/방전
+    public int nReserveType = 0; //1=충전, 2=방전, 3=충/방전
     public int bBeingCharged = -1;
 
     public Date dtStart = null;
     public Date dtEnd = null;
 
+    public int nServiceReservation = 0;
+    public int bPaid = 0;
+    public int dDx = 0.0;
+    public int dDy = 0.0;
+    public int nExpectedFee = 0;
 
-
-
-
-    public boolean m_bShowPush=true;
-
-    public String m_strMmsTarget="01094569304";
-
-    public int m_nCountNoticeTop=0;
-    public int m_nCountNoticeTotal=0;
-
-    public Date m_dtNoticeCreatedMaxForNextRequest=null;
-
-    public Date m_dtPicSendCreatedMaxForNextRequest=null;
-
-    public String m_strPushId="";
-
-    public String m_strMemberNameSubscribing="";
-    public String m_strPhoneSubscribing="";
-
-
-    public int nReserveType = 0;
     public boolean bCarRegistered = false;
 
     /*
