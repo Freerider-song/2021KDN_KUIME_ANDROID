@@ -9,9 +9,11 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import com.dinuscxj.progressbar.CircleProgressBar;
 import com.example.kuime.CaApplication;
+import com.example.kuime.CaPref;
 import com.example.kuime.CaResult;
 import com.example.kuime.IaResultHandler;
 import com.example.kuime.R;
@@ -25,6 +27,12 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import static com.example.kuime.CaApplication.m_Context;
+import static com.example.kuime.CaPref.PREF_CURRENT_CAP;
 
 public class ActivityCharge extends AppCompatActivity implements IaResultHandler, OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback  {
 

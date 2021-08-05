@@ -51,15 +51,15 @@
         android:onClick="onClick"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2">
+        app:layout_constraintTop_toBottomOf="@+id/tv_name">
 
         <ImageView
-            android:id="@+id/ivBattery"
+            android:id="@+id/iv_battery"
             android:layout_width="150dp"
             android:layout_height="70dp"
             android:layout_marginTop="15dp"
-            app:layout_constraintStart_toStartOf="@+id/textView16"
-            app:layout_constraintTop_toBottomOf="@+id/textView17"
+            app:layout_constraintStart_toStartOf="@+id/tv_station"
+            app:layout_constraintTop_toBottomOf="@+id/tv_car_model"
             app:srcCompat="@drawable/battery3" />
 
         <TextView
@@ -72,7 +72,7 @@
             android:textColor="@color/ks_gray"
             android:textSize="18dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageView5" />
+            app:layout_constraintTop_toTopOf="@+id/iv_next" />
 
         <TextView
             android:id="@+id/tv_car_model"
@@ -82,8 +82,21 @@
             android:text="현대 아이오닉 V5"
             android:textColor="@color/ks_gray"
             android:textSize="24dp"
-            app:layout_constraintStart_toStartOf="@+id/textView16"
-            app:layout_constraintTop_toBottomOf="@+id/textView16" />
+            app:layout_constraintStart_toStartOf="@+id/tv_station"
+            app:layout_constraintTop_toBottomOf="@+id/tv_station" />
+
+        <TextView
+            android:id="@+id/tv_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="이용 중인 서비스가 \n없습니다 :)"
+            android:textColor="@color/ks_gray"
+            android:textSize="32dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_current_capacity"
@@ -94,9 +107,9 @@
             android:textColor="@color/eg_cyan_dark"
             android:textSize="30dp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView7"
-            app:layout_constraintStart_toEndOf="@+id/imageView7"
-            app:layout_constraintTop_toTopOf="@+id/imageView7" />
+            app:layout_constraintBottom_toBottomOf="@+id/iv_battery"
+            app:layout_constraintStart_toEndOf="@+id/iv_battery"
+            app:layout_constraintTop_toTopOf="@+id/iv_battery" />
 
         <TextView
             android:id="@+id/tv_reserve_type"
@@ -107,10 +120,10 @@
             android:textColor="@color/ks_gray"
             android:textSize="21dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/textView16" />
+            app:layout_constraintStart_toStartOf="@+id/tv_station" />
 
         <ImageView
-            android:id="@+id/imageView5"
+            android:id="@+id/iv_next"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginTop="25dp"
@@ -119,14 +132,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/btn_back_2" />
 
-        <ImageView
-            android:id="@+id/imageView6"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginEnd="30dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView17"
-            app:srcCompat="@drawable/electric_car" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -150,7 +155,7 @@
             android:textColor="@color/ks_gray"
             android:textSize="18dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageView5" />
+            app:layout_constraintTop_toTopOf="@+id/iv_next" />
 
         <TextView
             android:id="@+id/textView17"
@@ -175,7 +180,7 @@
             app:layout_constraintStart_toStartOf="@+id/textView17" />
 
         <ImageView
-            android:id="@+id/imageView5"
+            android:id="@+id/iv_next"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginTop="25dp"
