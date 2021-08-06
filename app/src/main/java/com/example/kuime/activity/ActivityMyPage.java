@@ -108,4 +108,10 @@ public class ActivityMyPage extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+
+    }
+
 }

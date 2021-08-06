@@ -4,15 +4,22 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dinuscxj.progressbar.CircleProgressBar;
+import com.example.kuime.ActivityLogin;
 import com.example.kuime.CaApplication;
+import com.example.kuime.CaEngine;
 import com.example.kuime.CaPref;
 import com.example.kuime.CaResult;
 import com.example.kuime.IaResultHandler;
@@ -22,11 +29,14 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Cap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -52,6 +62,8 @@ public class ActivityCharge extends AppCompatActivity implements IaResultHandler
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_charge);
 
+        CaApplication.m_Engine.GetChargeInfo(CaApplication.m_Info.nServiceReservation, this, this);
+
         m_Context = getApplicationContext();
         m_Pref = new CaPref(m_Context);
         mNow = new Date(System.currentTimeMillis());
@@ -71,7 +83,15 @@ public class ActivityCharge extends AppCompatActivity implements IaResultHandler
         tvCompleteUntil = findViewById(R.id.tv_complete_until);
         tvEfficiency = findViewById(R.id.tv_efficiency);
 
-        tvFee.setText(CaApplication.m_Info.m_dfWon.format(CaApplication.m_Info.nExpectedFee * CaApplication.m_Info.dReserveTimeRatio));
+        tvFee.setText(CaApplication.m_Info.m_dfWon.format(CaApplication.m_Info.nExpectedFee * CaApplication.m_Info.dReserveTimeRatio)+ "원");
+
+        long calDate = CaApplication.m_Info.dtEnd.getTime() - mNow.getTime();
+        long calHour = calDate / (60*60*1000);
+        long calMin = calDate % (60*60*1000);
+        tvCompleteUntil.setText("서비스 완료까지 " + calHour + ":" + calMin + " 남았어요.");
+        tvEfficiency.setText(String.format("%.0f", CaApplication.m_Info.dBatteryCapacity
+                * (double)nCurrentCap
+                / 100 * CaApplication.m_Info.dEfficiency)+ "km를 달릴 수 있어요!");
     }
 
     @Override
@@ -107,6 +127,25 @@ public class ActivityCharge extends AppCompatActivity implements IaResultHandler
 
             case R.id.btn_stop: {
 
+                AlertDialog.Builder dlg = new AlertDialog.Builder(ActivityCharge.this);
+                dlg.setTitle("확인"); //제목
+                dlg.setMessage("서비스 이용을 중단하시겠습니까?"); // 메시지
+
+                dlg.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        stopCharge();
+
+                    }
+                });
+
+                dlg.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+
+                dlg.show();
+
             }
             break;
 
@@ -114,9 +153,53 @@ public class ActivityCharge extends AppCompatActivity implements IaResultHandler
         }
     }
 
+    public void stopCharge(){
+        CaApplication.m_Engine.StopCharge(CaApplication.m_Info.nServiceReservation,this,this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+
+    }
+
     @Override
     public void onResult(CaResult Result) {
+        if (Result.object == null) {
+            Toast.makeText(m_Context, "Check Network", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+        switch (Result.m_nCallback) {
+            case CaEngine.GET_CHARGE_INFO: {
+
+                try {
+                    JSONObject jo = Result.object;
+                    CaApplication.m_Info.nReserveType = jo.getInt("reserve_type");
+                    CaApplication.m_Info.dtEnd = CaApplication.m_Info.parseDate(jo.getString("finish_time"));
+                    CaApplication.m_Info.nExpectedFee = jo.getInt("expected_fee");
+                    CaApplication.m_Info.dDx = jo.getDouble("dx");
+                    CaApplication.m_Info.dDy = jo.getDouble("dy");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            break;
+
+            case CaEngine.STOP_CHARGE: {
+
+                Log.i("Charge", "StopCharge Result arrived...")
+            }
+            break;
+
+
+            default: {
+                //Log.i(TAG, "Unknown type result received");
+            }
+            break;
+
+        }
     }
 
 

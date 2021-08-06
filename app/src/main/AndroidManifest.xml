@@ -19,7 +19,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Kuime.NoActionBar">
-        <activity android:name=".activity.ActivityChargeHistory"></activity>
+        <activity android:name=".activity.ActivityChargeResult"></activity>
+        <activity android:name=".activity.ActivityChargeHistory" />
         <activity android:name=".activity.ActivityCharge" />
         <activity android:name=".activity.ActivityCard" />
         <activity android:name=".activity.ActivityCar" />

@@ -12,18 +12,39 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.kuime.CaApplication;
+import com.example.kuime.CaEngine;
+import com.example.kuime.CaResult;
 import com.example.kuime.EgMonthPicker;
+import com.example.kuime.IaResultHandler;
 import com.example.kuime.R;
+import com.example.kuime.model.CaCharger;
+import com.example.kuime.model.CaHistory;
+import com.example.kuime.model.CaStation;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
-public class ActivityChargeHistory extends AppCompatActivity {
+import static com.example.kuime.CaApplication.m_Context;
+
+public class ActivityChargeHistory extends AppCompatActivity implements IaResultHandler {
 
     private ChargeHistoryAdapter m_ChargeHistoryAdapter;
     public Button btnMonth;
     SimpleDateFormat mFormat = new SimpleDateFormat("MM");
+    SimpleDateFormat mYearMonth = new SimpleDateFormat("yyyy-MM");
+    SimpleDateFormat mMonthDay = new SimpleDateFormat("MM-dd");
+
+    String strYearMonth;
+
+    ArrayList<CaHistory> alHistory = new ArrayList<>();
 
     private EgMonthPicker m_dlgMonthPicker;
     public int Month;
@@ -35,6 +56,7 @@ public class ActivityChargeHistory extends AppCompatActivity {
 
         Calendar calToday = Calendar.getInstance();
         String m_dtToday = mFormat.format(calToday.getTime());
+        strYearMonth = mYearMonth.format(calToday.getTime());
         btnMonth.setText(m_dtToday+"월");
 
     }
@@ -58,13 +80,13 @@ public class ActivityChargeHistory extends AppCompatActivity {
         public int getCount() {
 
             //return plan.m_alAct.size();
-            return 4;
+            return alHistory.size();
         }
 
         @Override
         public Object getItem(int position) {
             //return plan.m_alAct.get(position);
-            return position;
+            return alHistory.get(position);
 
         }
 
@@ -92,6 +114,20 @@ public class ActivityChargeHistory extends AppCompatActivity {
                 holder = (ChargeHistoryViewHolder) convertView.getTag();
             }
 
+            final CaHistory history= alHistory.get(position);
+
+            holder.tvChargeDate.setText(mMonthDay.format(history.dtReserve));
+            if(history.nReserveType == 1){
+                holder.tvChargeType.setText("충전");
+            }
+            else if(history.nReserveType == 2){
+                holder.tvChargeType.setText("방전");
+            }
+            else if(history.nReserveType == 3){
+                holder.tvChargeType.setText("충/방전");
+            }
+            holder.tvEarningFee.setText(history.nFee);
+
             return convertView;
         }
     }
@@ -101,12 +137,16 @@ public class ActivityChargeHistory extends AppCompatActivity {
         setContentView(R.layout.activity_charge_history);
 
         timeSetting();
+        getChargeHistory();
 
         ListView listView = findViewById(R.id.lv_charge_history);
 
         m_ChargeHistoryAdapter= new ChargeHistoryAdapter();
 
         listView.setAdapter(m_ChargeHistoryAdapter);
+    }
+    public void getChargeHistory() {
+        CaApplication.m_Engine.GetChargeHistory(CaApplication.m_Info.strId, this, this );
     }
 
     public void onClick(View v) {
@@ -133,6 +173,10 @@ public class ActivityChargeHistory extends AppCompatActivity {
                         btnMonth = (Button) findViewById(R.id.btn_month_picker);
                         btnMonth.setText(strMonth+"월");
 
+                        strYearMonth = "2021-" + strMonth;
+
+                        getChargeHistory();
+
                     }
                 };
 
@@ -150,5 +194,57 @@ public class ActivityChargeHistory extends AppCompatActivity {
             break;
 
         }
+    }
+
+
+    @Override
+    public void onResult(CaResult Result) {
+        if (Result.object == null) {
+            Toast.makeText(m_Context, "Check Network", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        switch (Result.m_nCallback) {
+            case CaEngine.GET_CHARGE_HISTORY: {
+
+                try {
+                    JSONObject jo = Result.object;
+                    JSONArray ja = jo.getJSONArray("list_history");
+
+                    alHistory.clear();
+
+                    for(int i=0;i<ja.length();i++){
+                        JSONObject joHistory = ja.getJSONObject(i);
+                        CaHistory history = new CaHistory();
+
+                        history.dtReserve = CaApplication.m_Info.parseDate(joHistory.getString("reserve_time"));
+                        history.nReserveType = joHistory.getInt("reserve_type");
+                        history.nFee = joHistory.getInt("expected_fee");
+
+                        if(mYearMonth.format(history.dtReserve) == strYearMonth){
+                            alHistory.add(history);
+                        }
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            break;
+
+            default: {
+                //Log.i(TAG, "Unknown type result received");
+            }
+            break;
+
+        }
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        finish();
+
     }
 }

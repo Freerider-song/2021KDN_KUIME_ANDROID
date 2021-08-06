@@ -65,6 +65,7 @@ public class CaInfo {
     public int nModelId = 0;
 
     public String strStationName = "";
+    public int nStationId = 0;
     public int nFastCharger = 0;
     public int nSlowCharger = 0;
     public int nV2gCharger = 0;
@@ -87,8 +88,8 @@ public class CaInfo {
 
     public int nServiceReservation = 0;
     public int bPaid = 0;
-    public int dDx = 0.0;
-    public int dDy = 0.0;
+    public double dDx = 0.0;
+    public double dDy = 0.0;
     public int nExpectedFee = 0;
 
     public boolean bCarRegistered = false;
@@ -143,7 +144,6 @@ public class CaInfo {
 
         return dt;
     }
-
 
 
     public static String getDecoPhoneNumber(String src) {

@@ -40,6 +40,8 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+
+
         m_Context = getApplicationContext();
         m_Pref = new CaPref(m_Context);
         now = System.currentTimeMillis();
@@ -91,8 +93,11 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
                 tvReserveType.setText("스마트한 충전 중이에요!");
             }
 
-            nCurrentCap = (int)Math.round((100-nCurrentCap)*CaApplication.m_Info.dReserveTimeRatio + nCurrentCap);
-            m_Pref.setValue(PREF_CURRENT_CAP, nCurrentCap);
+            if(CaApplication.m_Info.dReserveTimeRatio <=1){ //1 이상이면 아직 충전 시작 시간이 되지 않았다는 것
+                nCurrentCap = (int)Math.round((100-nCurrentCap)*CaApplication.m_Info.dReserveTimeRatio + nCurrentCap);
+                m_Pref.setValue(PREF_CURRENT_CAP, nCurrentCap);
+            }
+
             tvCurrentCap.setText(Integer.toString(nCurrentCap));
             if(nCurrentCap <20) {
                 ivBattery.setImageDrawable(getDrawable(R.drawable.battery1));
@@ -136,8 +141,15 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
             break;
 
             case R.id.cl_charge_page: {
-                Intent it = new Intent(this, ActivityCharge.class);
-                startActivity(it);
+                if(CaApplication.m_Info.bPaid == 0 && CaApplication.m_Info.dtEnd.before(mNow)){
+                    Intent it = new Intent(this, ActivityChargeResult.class);
+                    startActivity(it);
+                }
+                else if(CaApplication.m_Info.bPaid == 0 && mNow.before(CaApplication.m_Info.dtEnd)){
+                    Intent it = new Intent(this, ActivityCharge.class);
+                    startActivity(it);
+                }
+
             }
             break;
 

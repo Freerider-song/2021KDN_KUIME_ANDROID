@@ -3,7 +3,9 @@ package com.example.kuime;
 import android.graphics.Bitmap;
 import android.util.Pair;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Formatter;
 import java.util.List;
 
@@ -35,6 +37,12 @@ public class CaArg {
     public void addArg(String strKey, double dValue)
     {
         args.add(new Pair<>(strKey, Double.toString(dValue)));
+    }
+
+    public void addArg(String strKey, Date dValue)
+    {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        args.add(new Pair<>(strKey, format.format(dValue)));
     }
 
     public void addArg(String strKey, boolean bValue)

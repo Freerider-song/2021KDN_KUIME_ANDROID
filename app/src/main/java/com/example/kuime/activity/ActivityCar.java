@@ -13,4 +13,10 @@ public class ActivityCar extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car);
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+
+    }
 }

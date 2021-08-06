@@ -210,20 +210,6 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView50"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:lineSpacingExtra="8sp"
-                    android:text="\"
-                    android:textColor="@color/ks_light_blue"
-                    android:textSize="40dp"
-                    android:textStyle="normal"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_fee"
-                    app:layout_constraintEnd_toStartOf="@+id/tv_fee"
-                    app:layout_constraintTop_toTopOf="@+id/tv_fee" />
-
-                <TextView
                     android:id="@+id/tv_fee"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -235,7 +221,7 @@
                     android:textSize="40dp"
                     android:textStyle="normal|bold"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.57"
+                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView52"
                     tools:gravity="center" />

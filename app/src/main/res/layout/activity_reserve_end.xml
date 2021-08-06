@@ -32,7 +32,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView33"
+        android:id="@+id/tv_reserve_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
@@ -47,7 +47,7 @@
         app:layout_constraintTop_toBottomOf="@+id/btn_back" />
 
     <TextView
-        android:id="@+id/textView34"
+        android:id="@+id/tv_fee_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -56,11 +56,11 @@
         android:text="최대요금"
         android:textColor="@color/ks_gray"
         android:textSize="26dp"
-        app:layout_constraintStart_toStartOf="@+id/textView33"
+        app:layout_constraintStart_toStartOf="@+id/tv_reserve_title"
         app:layout_constraintTop_toBottomOf="@+id/imageView12" />
 
     <TextView
-        android:id="@+id/textView35"
+        android:id="@+id/tv_fee"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -69,8 +69,8 @@
         android:text="25,970 원"
         android:textColor="@color/foreground1"
         android:textSize="40dp"
-        app:layout_constraintStart_toStartOf="@+id/textView34"
-        app:layout_constraintTop_toBottomOf="@+id/textView34" />
+        app:layout_constraintStart_toStartOf="@+id/tv_fee_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_fee_title" />
 
     <ImageView
         android:id="@+id/imageView12"
@@ -79,7 +79,7 @@
         android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView33"
+        app:layout_constraintTop_toBottomOf="@+id/tv_reserve_title"
         app:srcCompat="@drawable/reserve_end" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

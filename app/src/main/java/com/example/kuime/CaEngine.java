@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import java.sql.Time;
+import java.util.Date;
 
 public class CaEngine {
 
@@ -15,6 +16,13 @@ public class CaEngine {
     public static final int GET_CAR_MODEL_INFO = 1003;
     public static final int SET_SIGN_UP_INFO= 1004;
     public static final int GET_STATION_INFO = 1005;
+    public static final int GET_HOME_INFO = 1006;
+    public static final int GET_CHARGE_INFO = 1007;
+    public static final int STOP_CHARGE = 1008;
+    public static final int GET_CHARGE_HISTORY = 1009;
+    public static final int GET_CHARGE_RESULT = 1010;
+    public static final int SET_RESERVE_INFO = 1011;
+    public static final int SET_SERVICE_PAID = 1012;
 
 
 
@@ -119,6 +127,76 @@ public class CaEngine {
 
         executeCommand(Arg, GET_STATION_INFO, false, true, Ctx, ResultHandler);
     }
+
+    public void SetReserveInfo(String Id, int StationId, int ReserveType, Date StartTime, Date FinishTime, int MinimumCap, int CurrentCap, Context Ctx, IaResultHandler ResultHandler){
+        Log.i("ENGINE", "GetStationInfo called");
+
+        CaArg Arg = new CaArg("SetReserveInfo", NO_CMD_ARGS, null);
+        Arg.addArg("Id", Id);
+        Arg.addArg("ReserveType", ReserveType);
+        Arg.addArg("StartTime", StartTime);
+        Arg.addArg("FinishTime", FinishTime);
+        Arg.addArg("MinimumCap", MinimumCap);
+        Arg.addArg("CurrentCap", CurrentCap);
+        Arg.addArg("StationId", StationId);
+
+        executeCommand(Arg, SET_RESERVE_INFO, false, true, Ctx, ResultHandler);
+    }
+
+    public void GetHomeInfo(String Id, Context Ctx, IaResultHandler ResultHandler){
+        Log.i("ENGINE", "GetHomeInfo called");
+
+        CaArg Arg = new CaArg("GetHomeInfo", NO_CMD_ARGS, null);
+        Arg.addArg("Id", Id);
+
+        executeCommand(Arg, GET_HOME_INFO, false, true, Ctx, ResultHandler);
+    }
+
+    public void GetChargeInfo(int ServiceReservationId, Context Ctx, IaResultHandler ResultHandler){
+        Log.i("ENGINE", "GetChargeInfo called");
+
+        CaArg Arg = new CaArg("GetChargeInfo", NO_CMD_ARGS, null);
+        Arg.addArg("Service_reservation_id", ServiceReservationId);
+
+        executeCommand(Arg, GET_CHARGE_INFO, false, true, Ctx, ResultHandler);
+    }
+
+    public void StopCharge(int ServiceReservationId, Context Ctx, IaResultHandler ResultHandler){
+        Log.i("ENGINE", "StopCharge called");
+
+        CaArg Arg = new CaArg("StopCharge", NO_CMD_ARGS, null);
+        Arg.addArg("Service_reservation_id", ServiceReservationId);
+
+        executeCommand(Arg, STOP_CHARGE, false, true, Ctx, ResultHandler);
+    }
+
+    public void GetChargeHistory(String Id, Context Ctx, IaResultHandler ResultHandler){
+        Log.i("ENGINE", "GetChargeHistory called");
+
+        CaArg Arg = new CaArg("GetChargeHistory", NO_CMD_ARGS, null);
+        Arg.addArg("Id", Id);
+
+        executeCommand(Arg, GET_CHARGE_HISTORY, false, true, Ctx, ResultHandler);
+    }
+
+    public void GetChargeResult(int ServiceReservationId, Context Ctx, IaResultHandler ResultHandler){
+        Log.i("ENGINE", "GetChargeResult called");
+
+        CaArg Arg = new CaArg("GetChargeResult", NO_CMD_ARGS, null);
+        Arg.addArg("Service_reservation_id", ServiceReservationId);
+
+        executeCommand(Arg, GET_CHARGE_RESULT, false, true, Ctx, ResultHandler);
+    }
+
+    public void SetServicePaid(int ServiceReservationId, Context Ctx, IaResultHandler ResultHandler){
+        Log.i("ENGINE", "SetServicePaid called");
+
+        CaArg Arg = new CaArg("SetServicePaid", NO_CMD_ARGS, null);
+        Arg.addArg("Service_reservation_id", ServiceReservationId);
+
+        executeCommand(Arg, SET_SERVICE_PAID, false, true, Ctx, ResultHandler);
+    }
+
 
 
 

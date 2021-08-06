@@ -1,4 +1,4 @@
-package com.example.kuime;
+package com.example.kuime.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,6 +12,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.kuime.CaApplication;
+import com.example.kuime.CaEngine;
+import com.example.kuime.CaPref;
+import com.example.kuime.CaResult;
+import com.example.kuime.IaResultHandler;
+import com.example.kuime.R;
 import com.example.kuime.activity.ActivityAuth;
 import com.example.kuime.activity.ActivityHome;
 
@@ -23,7 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class ActivityLogin extends AppCompatActivity implements IaResultHandler{
+public class ActivityLogin extends AppCompatActivity implements IaResultHandler {
 
     private EditText m_etUserId;
     private EditText m_etPassword;
@@ -101,6 +107,7 @@ public class ActivityLogin extends AppCompatActivity implements IaResultHandler{
     }
 
 
+
     @Override
     public void onResult(CaResult Result) {
         if (Result.object == null) {
@@ -124,8 +131,8 @@ public class ActivityLogin extends AppCompatActivity implements IaResultHandler{
                         CaApplication.m_Info.strId = m_strMemberId;
                         CaApplication.m_Info.strPassword = m_strPassword;
 
-                        Intent it = new Intent(this, ActivityHome.class);
-                        startActivity(it);
+                        CaApplication.m_Engine.GetHomeInfo(m_strMemberId, this,this);
+
 
                     } else {
                         AlertDialog.Builder dlg = new AlertDialog.Builder(ActivityLogin.this);
@@ -136,6 +143,30 @@ public class ActivityLogin extends AppCompatActivity implements IaResultHandler{
                         });
                         dlg.show();
                     }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            break;
+
+            case CaEngine.GET_HOME_INFO: {
+
+                try {
+                    JSONObject jo = Result.object;
+                    CaApplication.m_Info.strName = jo.getString("name");
+                    CaApplication.m_Info.strCarModel = jo.getString("car_model");
+                    CaApplication.m_Info.dEfficiency = jo.getDouble("efficiency");
+                    CaApplication.m_Info.dBatteryCapacity = jo.getDouble("battery_capacity");
+                    CaApplication.m_Info.bPaid = jo.getInt("is_paid");
+                    CaApplication.m_Info.nServiceReservation = jo.getInt("service_reservation_id");
+                    CaApplication.m_Info.dtStart = CaApplication.m_Info.parseDate(jo.getString("start_time"));
+                    CaApplication.m_Info.dtEnd = CaApplication.m_Info.parseDate(jo.getString("finish_time"));
+                    CaApplication.m_Info.strStationName = jo.getString("station_name");
+
+                    Intent it = new Intent(this, ActivityHome.class);
+                    startActivity(it);
+
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

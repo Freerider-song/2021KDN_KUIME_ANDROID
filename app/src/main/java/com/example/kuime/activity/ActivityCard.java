@@ -13,4 +13,10 @@ public class ActivityCard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card);
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+
+    }
 }

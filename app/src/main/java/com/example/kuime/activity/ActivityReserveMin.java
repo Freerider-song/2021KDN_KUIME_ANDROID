@@ -37,9 +37,9 @@ public class ActivityReserveMin extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String str = (String) spinner.getSelectedItem();
                 CaApplication.m_Info.nMinCapacity = Integer.parseInt(str.substring(0, str.length()-1));
-                tvMinKm.setText("주행가능거리: " + String.format("%.2f", CaApplication.m_Info.dBatteryCapacity
+                tvMinKm.setText("주행가능거리: " + String.format("%.0f", CaApplication.m_Info.dBatteryCapacity
                         * (double)CaApplication.m_Info.nMinCapacity
-                        % 100 * CaApplication.m_Info.dEfficiency)+ "km");
+                        / 100 * CaApplication.m_Info.dEfficiency)+ "km");
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {

@@ -8,18 +8,28 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.kuime.CaApplication;
+import com.example.kuime.CaPref;
 import com.example.kuime.R;
+
+import static com.example.kuime.CaApplication.m_Context;
 
 public class ActivityReserveService extends AppCompatActivity {
 
-    @Override
+    CaPref m_Pref;
+
+   @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reserve_service);
 
+       m_Context = getApplicationContext();
+       m_Pref = new CaPref(m_Context);
+
+       int nCurrentCap = m_Pref.getValue(CaPref.PREF_CURRENT_CAP, 45);
+
         TextView tvCurrent = findViewById(R.id.tv_current_capacity);
-        tvCurrent.setText("현재 배터리는 \n" + CaApplication.m_Info.nCurrentCapacity +
-                "입니다");
+        tvCurrent.setText("현재 배터리는 \n" + nCurrentCap+
+                "% 입니다");
     }
 
     public void onClick(View v) {

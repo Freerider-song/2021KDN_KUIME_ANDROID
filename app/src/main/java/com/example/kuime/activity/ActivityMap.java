@@ -145,7 +145,17 @@ public class ActivityMap extends AppCompatActivity implements IaResultHandler, O
                 MapBottom bottomSheet = new MapBottom();
                 Bundle bundle = new Bundle();
                 bundle.putString("station_name", marker.getTitle());
+                for(int i = 0; i<alStation.size(); i++){
+                    CaStation station = alStation.get(i);
+                    if(station.strStationName == marker.getTitle()){
+                        CaApplication.m_Info.nStationId = station.nStationId;
+                        CaApplication.m_Info.nSlowCharger = station.nSlowCharger;
+                        CaApplication.m_Info.nFastCharger = station.nFastCharger;
+                        CaApplication.m_Info.nV2gCharger = station.nV2gCharger;
+                    }
+                }
                 bundle.putString("charger_num", marker.getSnippet());
+
                 bottomSheet.setArguments(bundle);
                 bottomSheet.show(getSupportFragmentManager(), "exampleBottomSheet");
                 return false;
@@ -259,6 +269,10 @@ public class ActivityMap extends AppCompatActivity implements IaResultHandler, O
 
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
 
+    }
 
 }

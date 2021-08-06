@@ -150,4 +150,10 @@ public class ActivityReserveCharger extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+
+    }
 }
