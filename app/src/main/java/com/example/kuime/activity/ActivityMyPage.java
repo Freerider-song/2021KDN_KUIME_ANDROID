@@ -12,7 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.kuime.ActivityLogin;
+//import com.example.kuime.ActivityLogin;
 import com.example.kuime.CaApplication;
 import com.example.kuime.CaPref;
 import com.example.kuime.R;

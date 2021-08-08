@@ -17,7 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dinuscxj.progressbar.CircleProgressBar;
-import com.example.kuime.ActivityLogin;
+//import com.example.kuime.ActivityLogin;
 import com.example.kuime.CaApplication;
 import com.example.kuime.CaEngine;
 import com.example.kuime.CaPref;
@@ -189,7 +189,7 @@ public class ActivityCharge extends AppCompatActivity implements IaResultHandler
 
             case CaEngine.STOP_CHARGE: {
 
-                Log.i("Charge", "StopCharge Result arrived...")
+                Log.i("Charge", "StopCharge Result arrived...");
             }
             break;
 

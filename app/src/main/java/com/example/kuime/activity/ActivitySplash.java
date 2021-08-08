@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.kuime.ActivityLogin;
+import com.example.kuime.activity.ActivityLogin;
 import com.example.kuime.R;
 
 public class ActivitySplash extends AppCompatActivity {

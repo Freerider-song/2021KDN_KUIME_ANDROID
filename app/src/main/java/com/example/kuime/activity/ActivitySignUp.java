@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.kuime.ActivityLogin;
+//import com.example.kuime.ActivityLogin;
 import com.example.kuime.CaApplication;
 import com.example.kuime.CaResult;
 import com.example.kuime.IaResultHandler;

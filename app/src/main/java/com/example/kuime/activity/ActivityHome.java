@@ -2,7 +2,7 @@ package com.example.kuime.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.kuime.ActivityLogin;
+import com.example.kuime.activity.ActivityLogin;
 import com.example.kuime.CaApplication;
 import com.example.kuime.CaPref;
 import com.example.kuime.CaResult;
@@ -39,8 +39,6 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
-
 
         m_Context = getApplicationContext();
         m_Pref = new CaPref(m_Context);

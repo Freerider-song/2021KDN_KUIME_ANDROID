@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.kuime.ActivityLogin;
+//import com.example.kuime.ActivityLogin;
 import com.example.kuime.R;
 
 public class ActivitySignUpComplete extends AppCompatActivity{
