@@ -26,7 +26,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.kuime.ActivityLogin;
+//import com.example.kuime.ActivityLogin;
 import com.example.kuime.CaApplication;
 import com.example.kuime.CaEngine;
 import com.example.kuime.CaPref;

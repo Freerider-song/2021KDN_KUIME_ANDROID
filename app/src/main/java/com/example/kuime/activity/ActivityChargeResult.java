@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.kuime.ActivityLogin;
+import com.example.kuime.activity.ActivityLogin;
 import com.example.kuime.CaApplication;
 import com.example.kuime.CaEngine;
 import com.example.kuime.CaPref;
@@ -56,7 +56,7 @@ public class ActivityChargeResult extends AppCompatActivity implements IaResultH
         switch (v.getId()) {
 
             case R.id.btn_back: {
-               finish();
+                finish();
             }
             break;
 
