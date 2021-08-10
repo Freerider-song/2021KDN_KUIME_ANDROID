@@ -50,6 +50,9 @@ public class ActivitySignUpCar extends AppCompatActivity implements IaResultHand
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up_car);
+
+        spCompany = findViewById(R.id.sp_car_company);
+        spModel = findViewById(R.id.sp_car_model);
         CaApplication.m_Engine.GetCarCompanyInfo(this,this);
 
     }
@@ -94,6 +97,7 @@ public class ActivitySignUpCar extends AppCompatActivity implements IaResultHand
             case CaEngine.GET_CAR_COMPANY_INFO: {
 
                 try {
+                    Log.i("SignUpCar", "GetCarCompanyInfo called..");
                     JSONObject jo = Result.object;
                     JSONArray ja = jo.getJSONArray("manufacturers");
 
@@ -110,7 +114,7 @@ public class ActivitySignUpCar extends AppCompatActivity implements IaResultHand
                         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
                             View v = super.getView(position, convertView, parent);
-                            ((TextView) v).setTextSize(24.0f);
+                            ((TextView) v).setTextSize(22.0f);
                             ((TextView) v).setTextColor(getResources().getColor(R.color.ks_gray));
                             return v;
 
@@ -147,10 +151,13 @@ public class ActivitySignUpCar extends AppCompatActivity implements IaResultHand
 
             case CaEngine.GET_CAR_MODEL_INFO: {
 
+                Log.i("SignUpCar", "GetCarModelInfo called..");
                 try {
                     JSONObject jo = Result.object;
                     JSONArray ja = jo.getJSONArray("models");
 
+                    alModel.clear();
+                    alStrModel.clear();
                     for (int i=0; i<ja.length(); i++) {
 
                         JSONObject joModel=ja.getJSONObject(i);
@@ -171,7 +178,7 @@ public class ActivitySignUpCar extends AppCompatActivity implements IaResultHand
 
                             View v = super.getView(position, convertView, parent);
 
-                            ((TextView) v).setTextSize(24.0f);
+                            ((TextView) v).setTextSize(22.0f);
                             ((TextView) v).setTextColor(getResources().getColor(R.color.ks_gray));
                             return v;
 

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,8 +77,8 @@ public class ActivityReserveCharger extends AppCompatActivity {
                 LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.list_item_charger, null);
 
-                holder.tvChargerName = convertView.findViewById(R.id.tv_charger_name);
-                holder.tvChargerUsed = convertView.findViewById(R.id.tv_charge_used);
+                holder.tvChargerName = convertView.findViewById(R.id.tv_charge_name);
+                holder.tvChargerUsed = convertView.findViewById(R.id.tv_charger_used);
 
                 convertView.setTag(holder);
             }
@@ -89,6 +90,7 @@ public class ActivityReserveCharger extends AppCompatActivity {
 
             final CaCharger charger= alCharger.get(position);
 
+            Log.i("ReserveCharger", "리스트 충전기 이름" + charger.strChargerName + " 포지션 : " + position);
             holder.tvChargerName.setText(charger.strChargerName);
             if(charger.bUsed){
                 holder.tvChargerUsed.setVisibility(View.VISIBLE);
@@ -105,28 +107,39 @@ public class ActivityReserveCharger extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reserve_charger);
+        Log.i("ReserveCharger", "충전기 갯수들 " + CaApplication.m_Info.nFastCharger + " " + CaApplication.m_Info.nV2gCharger +
+                " " + CaApplication.m_Info.nSlowCharger);
+        int nCount = CaApplication.m_Info.nFastCharger + CaApplication.m_Info.nV2gCharger + CaApplication.m_Info.nSlowCharger;
+        Log.i("ReserveCharger", "총 충전기 갯수는 " + nCount);
 
-        int nCount = CaApplication.m_Info.nFastCharger + CaApplication.m_Info.nSlowCharger;
 
         Random random = new Random();
-        CaCharger charger = new CaCharger();
+
+
+        alCharger.clear();
         for(int i=0; i<CaApplication.m_Info.nV2gCharger; i++){
+            CaCharger charger = new CaCharger();
             charger.strChargerName = "V2G 충전기";
             charger.bUsed = false;
+            Log.i("ReserveCharger", " 충전기 이름: v2g 충전기 bused : " + charger.bUsed);
             alCharger.add(charger);
         }
 
-        for(int i=CaApplication.m_Info.nV2gCharger; i<CaApplication.m_Info.nFastCharger; i++){
+        for(int i=CaApplication.m_Info.nV2gCharger; i<CaApplication.m_Info.nFastCharger+CaApplication.m_Info.nFastCharger; i++){
+            CaCharger charger = new CaCharger();
             charger.strChargerName = Integer.toString(i+1)+"충전기 (급속)";
             charger.bUsed = random.nextBoolean();
+            Log.i("ReserveCharger", " 충전기 이름: "+ charger.strChargerName +" bused : " + charger.bUsed);
             alCharger.add(charger);
         }
-        for(int i=CaApplication.m_Info.nFastCharger; i<nCount; i++){
-
+        for(int i=CaApplication.m_Info.nFastCharger; i<CaApplication.m_Info.nV2gCharger+CaApplication.m_Info.nFastCharger+CaApplication.m_Info.nSlowCharger; i++){
+            CaCharger charger = new CaCharger();
             charger.strChargerName = Integer.toString(i+1)+"충전기 (완속)";
             charger.bUsed = random.nextBoolean();
+            Log.i("ReserveCharger", " 충전기 이름: "+ charger.strChargerName +" bused : " + charger.bUsed);
             alCharger.add(charger);
         }
+        Log.i("ReserveCharge", "충전기 갯수 " + alCharger.size());
 
         ListView listView = findViewById(R.id.lv_charger);
 
@@ -151,6 +164,16 @@ public class ActivityReserveCharger extends AppCompatActivity {
         });
     }
 
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_back: {
+                finish();
+
+            }
+            break;
+
+        }
+    }
     @Override
     public void onBackPressed() {
         finish();

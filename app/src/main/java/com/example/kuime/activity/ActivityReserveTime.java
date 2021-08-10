@@ -69,17 +69,18 @@ public class ActivityReserveTime extends AppCompatActivity implements IaResultHa
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
                     {
-                        if(monthOfYear>8 && dayOfMonth>=10){
-                            tvDateStart.setText(monthOfYear+1 + "/" + dayOfMonth);
+                        monthOfYear = monthOfYear +1;
+                        if(monthOfYear>9 && dayOfMonth>=10){
+                            tvDateStart.setText(monthOfYear + "/" + dayOfMonth);
                         }
-                        else if(monthOfYear<=8 && dayOfMonth>=10){
-                            tvDateStart.setText("0"+monthOfYear+1 + "/" + dayOfMonth);
+                        else if(monthOfYear<=9 && dayOfMonth>=10){
+                            tvDateStart.setText("0"+monthOfYear + "/" + dayOfMonth);
                         }
-                        else if(monthOfYear>8 && dayOfMonth<10){
-                            tvDateStart.setText(monthOfYear+1 + "/0" + dayOfMonth);
+                        else if(monthOfYear>9 && dayOfMonth<10){
+                            tvDateStart.setText(monthOfYear+ "/0" + dayOfMonth);
                         }
                         else{
-                            tvDateStart.setText("0"+monthOfYear+1 + "/0" + dayOfMonth);
+                            tvDateStart.setText("0"+monthOfYear + "/0" + dayOfMonth);
                         }
 
                     }
@@ -96,17 +97,18 @@ public class ActivityReserveTime extends AppCompatActivity implements IaResultHa
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
                     {
-                        if(monthOfYear>8 && dayOfMonth>=10){
-                            tvDateEnd.setText(monthOfYear+1 + "/" + dayOfMonth);
+                        monthOfYear = monthOfYear +1;
+                        if(monthOfYear>9 && dayOfMonth>=10){
+                            tvDateEnd.setText(monthOfYear + "/" + dayOfMonth);
                         }
-                        else if(monthOfYear<=8 && dayOfMonth>=10){
-                            tvDateEnd.setText("0"+monthOfYear+1 + "/" + dayOfMonth);
+                        else if(monthOfYear<=9 && dayOfMonth>=10){
+                            tvDateEnd.setText("0"+monthOfYear + "/" + dayOfMonth);
                         }
-                        else if(monthOfYear>8 && dayOfMonth<10){
-                            tvDateEnd.setText(monthOfYear+1 + "/0" + dayOfMonth);
+                        else if(monthOfYear>9 && dayOfMonth<10){
+                            tvDateEnd.setText(monthOfYear + "/0" + dayOfMonth);
                         }
                         else{
-                            tvDateEnd.setText("0"+monthOfYear+1 + "/0" + dayOfMonth);
+                            tvDateEnd.setText("0"+monthOfYear + "/0" + dayOfMonth);
                         }
                     }
                 };
@@ -173,24 +175,20 @@ public class ActivityReserveTime extends AppCompatActivity implements IaResultHa
                         "-" + tvTimeStart.getText().toString().substring(3,5)+"-00";
                 Log.d("ReserveTime", "from is: " +from);
                 SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                try {
-                    CaApplication.m_Info.dtStart = transFormat.parse(from);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+
+                    CaApplication.m_Info.dtStart = CaApplication.m_Info.parseDate(from);
+
 
                 String to = "2021-"+tvDateEnd.getText().toString().substring(0,2)+"-"
                         +tvDateEnd.getText().toString().substring(3,5) + "-"+ tvTimeEnd.getText().toString().substring(0,2)+
                         "-" + tvTimeEnd.getText().toString().substring(3,5)+"-00";
                 Log.d("ReserveTime", "to is: " +to);
-                try {
-                    CaApplication.m_Info.dtEnd = transFormat.parse(to);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+
+                CaApplication.m_Info.dtEnd = CaApplication.m_Info.parseDate(to);
 
 
-                CaApplication.m_Engine.SetReserveInfo(CaApplication.m_Info.strId, CaApplication.m_Info.nStationId, CaApplication.m_Info.nReserveType, CaApplication.m_Info.dtStart, CaApplication.m_Info.dtEnd
+
+                CaApplication.m_Engine.SetReserveInfo(CaApplication.m_Info.strId, CaApplication.m_Info.nStationId, CaApplication.m_Info.nReserveType, from, to
                 , CaApplication.m_Info.nMinCapacity, 45, this, this);
 
 
@@ -222,17 +220,17 @@ public class ActivityReserveTime extends AppCompatActivity implements IaResultHa
 
                 try {
                     JSONObject jo = Result.object;
-
+/*
                     if(jo.getInt("result_code")==0){
                         Toast.makeText(this, "서비스 예약에 실패하였습니다.", Toast.LENGTH_LONG).show();
-                    }
-                    else{
-                        CaApplication.m_Info.nServiceReservation = jo.getInt("service_reservation_id");
-                        CaApplication.m_Info.nExpectedFee = jo.getInt("expected_fee");
+                    }*/
 
-                        Intent it = new Intent(this, ActivityReserveEnd.class);
-                        startActivity(it);
-                    }
+
+                    CaApplication.m_Info.nServiceReservation = jo.getString("service_reservation_id");
+                    CaApplication.m_Info.nExpectedFee = jo.getInt("expected_fee");
+
+                    Intent it = new Intent(this, ActivityReserveEnd.class);
+                    startActivity(it);
 
 
 

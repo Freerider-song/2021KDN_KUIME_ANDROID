@@ -1,20 +1,32 @@
 package com.example.kuime.activity;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
 
 //import com.example.kuime.ActivityLogin;
 import com.example.kuime.CaApplication;
+import com.example.kuime.CaEngine;
 import com.example.kuime.CaPref;
 import com.example.kuime.CaResult;
 import com.example.kuime.IaResultHandler;
 import com.example.kuime.R;
+import com.example.kuime.model.CaCarModel;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -52,27 +64,45 @@ public class ActivitySignUpCard extends AppCompatActivity implements IaResultHan
 
     @Override
     public void onResult(CaResult Result) {
+        if (Result.object == null) {
+            Toast.makeText(getApplicationContext(), "Check Network", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        try {
-            JSONObject jo = Result.object;
-            int nResultCode = jo.getInt("result_code");
+        switch (Result.m_nCallback) {
+            case CaEngine.SET_SIGN_UP_INFO: {
 
-            if (nResultCode == 1) {
+                try {
+                    JSONObject jo = Result.object;
+                    int nResultCode = jo.getInt("result_code");
 
-                Intent it = new Intent(this, ActivitySignUpComplete.class);
-                startActivity(it);
+                    if (nResultCode == 1) {
 
-            } else {
-                AlertDialog.Builder dlg = new AlertDialog.Builder(ActivitySignUpCard.this);
-                dlg.setMessage("회원가입이 정상적으로 진행되지 않았습니다. 처음부터 다시 진행해주세요");
-                dlg.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
+                        Intent it = new Intent(this, ActivitySignUpComplete.class);
+                        startActivity(it);
+
+                    } else {
+                        AlertDialog.Builder dlg = new AlertDialog.Builder(ActivitySignUpCard.this);
+                        dlg.setMessage("회원가입이 정상적으로 진행되지 않았습니다. 처음부터 다시 진행해주세요");
+                        dlg.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
+                        dlg.show();
                     }
-                });
-                dlg.show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
+            break;
+
+
+
+            default: {
+                //Log.i(TAG, "Unknown type result received");
+            }
+            break;
+
         }
 
     }

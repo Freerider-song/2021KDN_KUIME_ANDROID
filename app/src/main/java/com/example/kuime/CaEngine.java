@@ -109,9 +109,9 @@ public class CaEngine {
     }
 
     public void SetSignUpInfo(String Name, String Id,String Password,int CarModelId,Context Ctx, IaResultHandler ResultHandler){
-        Log.i("ENGINE", "GetCarModelInfo called");
+        Log.i("ENGINE", "SetSignUpInfo called");
 
-        CaArg Arg = new CaArg("GetCarModelInfo", NO_CMD_ARGS, null);
+        CaArg Arg = new CaArg("SetSignUpInfo", NO_CMD_ARGS, null);
         Arg.addArg("Car_model", CarModelId);
         Arg.addArg("Name", Name);
         Arg.addArg("Id", Id);
@@ -128,7 +128,7 @@ public class CaEngine {
         executeCommand(Arg, GET_STATION_INFO, false, true, Ctx, ResultHandler);
     }
 
-    public void SetReserveInfo(String Id, int StationId, int ReserveType, Date StartTime, Date FinishTime, int MinimumCap, int CurrentCap, Context Ctx, IaResultHandler ResultHandler){
+    public void SetReserveInfo(String Id, int StationId, int ReserveType, String StartTime, String FinishTime, int MinimumCap, int CurrentCap, Context Ctx, IaResultHandler ResultHandler){
         Log.i("ENGINE", "GetStationInfo called");
 
         CaArg Arg = new CaArg("SetReserveInfo", NO_CMD_ARGS, null);
@@ -152,7 +152,7 @@ public class CaEngine {
         executeCommand(Arg, GET_HOME_INFO, false, true, Ctx, ResultHandler);
     }
 
-    public void GetChargeInfo(int ServiceReservationId, Context Ctx, IaResultHandler ResultHandler){
+    public void GetChargeInfo(String ServiceReservationId, Context Ctx, IaResultHandler ResultHandler){
         Log.i("ENGINE", "GetChargeInfo called");
 
         CaArg Arg = new CaArg("GetChargeInfo", NO_CMD_ARGS, null);
@@ -161,7 +161,7 @@ public class CaEngine {
         executeCommand(Arg, GET_CHARGE_INFO, false, true, Ctx, ResultHandler);
     }
 
-    public void StopCharge(int ServiceReservationId, Context Ctx, IaResultHandler ResultHandler){
+    public void StopCharge(String ServiceReservationId, Context Ctx, IaResultHandler ResultHandler){
         Log.i("ENGINE", "StopCharge called");
 
         CaArg Arg = new CaArg("StopCharge", NO_CMD_ARGS, null);
@@ -179,7 +179,7 @@ public class CaEngine {
         executeCommand(Arg, GET_CHARGE_HISTORY, false, true, Ctx, ResultHandler);
     }
 
-    public void GetChargeResult(int ServiceReservationId, Context Ctx, IaResultHandler ResultHandler){
+    public void GetChargeResult(String ServiceReservationId, Context Ctx, IaResultHandler ResultHandler){
         Log.i("ENGINE", "GetChargeResult called");
 
         CaArg Arg = new CaArg("GetChargeResult", NO_CMD_ARGS, null);
@@ -188,7 +188,7 @@ public class CaEngine {
         executeCommand(Arg, GET_CHARGE_RESULT, false, true, Ctx, ResultHandler);
     }
 
-    public void SetServicePaid(int ServiceReservationId, Context Ctx, IaResultHandler ResultHandler){
+    public void SetServicePaid(String ServiceReservationId, Context Ctx, IaResultHandler ResultHandler){
         Log.i("ENGINE", "SetServicePaid called");
 
         CaArg Arg = new CaArg("SetServicePaid", NO_CMD_ARGS, null);

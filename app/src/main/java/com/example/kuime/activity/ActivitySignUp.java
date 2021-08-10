@@ -80,6 +80,8 @@ public class ActivitySignUp extends AppCompatActivity implements IaResultHandler
                     dlg.show();
                 }
                 else {
+                    CaApplication.m_Info.strId = strId;
+                    CaApplication.m_Info.strPassword = strPassword;
                     Intent it = new Intent(this, ActivitySignUpCar.class);
                     startActivity(it);
                 }

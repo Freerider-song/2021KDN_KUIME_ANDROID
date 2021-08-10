@@ -18,7 +18,7 @@ public class ActivityReserveConnect extends AppCompatActivity {
         setContentView(R.layout.activity_reserve_connect);
 
         TextView tvStationName = findViewById(R.id.tv_station_name);
-        TextView tvChargerName = findViewById(R.id.tv_charger_name);
+        TextView tvChargerName = findViewById(R.id.tv_charger_used);
 
         tvStationName.setText(CaApplication.m_Info.strStationName);
         tvChargerName.setText(CaApplication.m_Info.strChargerName);

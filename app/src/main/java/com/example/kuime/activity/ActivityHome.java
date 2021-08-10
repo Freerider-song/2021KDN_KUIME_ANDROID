@@ -2,12 +2,14 @@ package com.example.kuime.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.kuime.CaEngine;
 import com.example.kuime.activity.ActivityLogin;
 import com.example.kuime.CaApplication;
 import com.example.kuime.CaPref;
 import com.example.kuime.CaResult;
 import com.example.kuime.IaResultHandler;
 import com.example.kuime.R;
+import com.example.kuime.model.CaStation;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -17,6 +19,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -36,10 +43,9 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
     SimpleDateFormat mFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+    protected  void onResume() {
 
+        super.onResume();
         m_Context = getApplicationContext();
         m_Pref = new CaPref(m_Context);
         now = System.currentTimeMillis();
@@ -47,13 +53,19 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
 
         if(CaApplication.m_Info.dtStart != null && CaApplication.m_Info.dtEnd != null){
             long calDate = CaApplication.m_Info.dtEnd.getTime() - CaApplication.m_Info.dtStart.getTime();
-            long calNow = CaApplication.m_Info.dtEnd.getTime() - now;
+            long calNow = now-CaApplication.m_Info.dtStart.getTime();
             CaApplication.m_Info.dReserveTimeRatio = calNow / (double) calDate;
             Log.d("HOME", "ReserveTimeRatio is " + CaApplication.m_Info.dReserveTimeRatio);
         }
 
-
+        //m_Pref.setValue(PREF_CURRENT_CAP, 45);
         int nCurrentCap = m_Pref.getValue(PREF_CURRENT_CAP, 45);
+        if(nCurrentCap ==0){
+            m_Pref.setValue(PREF_CURRENT_CAP, 45);
+            nCurrentCap = m_Pref.getValue(PREF_CURRENT_CAP, 45);
+        }
+        Log.i("HOME", "current cap is " +nCurrentCap);
+
 
         tvName = findViewById(R.id.tv_name);
         tvStation = findViewById(R.id.tv_station);
@@ -98,10 +110,10 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
 
             if(CaApplication.m_Info.dReserveTimeRatio <=1){ //1 이상이면 아직 충전 시작 시간이 되지 않았다는 것
                 nCurrentCap = (int)Math.round((100-nCurrentCap)*CaApplication.m_Info.dReserveTimeRatio + nCurrentCap);
-                m_Pref.setValue(PREF_CURRENT_CAP, nCurrentCap);
+                //m_Pref.setValue(PREF_CURRENT_CAP, nCurrentCap);
             }
 
-            tvCurrentCap.setText(Integer.toString(nCurrentCap));
+            tvCurrentCap.setText(Integer.toString(nCurrentCap)+ "%");
             if(nCurrentCap <20) {
                 ivBattery.setImageDrawable(getDrawable(R.drawable.battery1));
             }
@@ -122,12 +134,20 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
 
 
     }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home);
+
+
+
+    }
 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_map: {
-                    Intent it = new Intent(this, ActivityMap.class);
-                    startActivity(it);
+                    CaApplication.m_Engine.GetStationInfo(this,this);
+
             }
             break;
 
@@ -162,6 +182,56 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
 
     @Override
     public void onResult(CaResult Result) {
+        if (Result.object == null) {
+            Toast.makeText(m_Context, "Check Network", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        switch (Result.m_nCallback) {
+            case CaEngine.GET_STATION_INFO: {
+                Log.i("MAP" , "GetStationInfo called");
+                try {
+                    JSONObject jo = Result.object;
+                    JSONArray ja = jo.getJSONArray("features");
+
+                    CaApplication.m_Info.alStation.clear();
+
+                    for(int i=0;i<ja.length();i++){
+                        JSONObject joStation = ja.getJSONObject(i);
+                        CaStation station = new CaStation();
+                        JSONObject joGeometry = joStation.getJSONObject("geometry");
+                        JSONObject joProperties = joStation.getJSONObject("properties");
+
+                        //JSONObject joGeometry = jaGeometry.getJSONObject(0);
+                        JSONArray jaDxy =joGeometry.getJSONArray("coordinates");
+                        station.dx = jaDxy.getDouble(0);
+                        station.dy = jaDxy.getDouble(1);
+
+
+                        //JSONObject joProperties = jaProperties.getJSONObject(0);
+                        station.nFastCharger = joProperties.getInt("fast_charger");
+                        station.nSlowCharger = joProperties.getInt("slow_charger");
+                        station.nStationId = joProperties.getInt("station_id");
+                        station.strStationName = joProperties.getString("station_name");
+                        station.nV2gCharger = joProperties.getInt("v2g");
+                        Log.i("MAP", "StationNAme = " +station.strStationName  + " " + station.dx + " " +station.dy);
+                        CaApplication.m_Info.alStation.add(station);
+                    }
+                    Intent it = new Intent(this, ActivityMap.class);
+                    startActivity(it);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            break;
+
+            default: {
+                //Log.i(TAG, "Unknown type result received");
+            }
+            break;
+
+        }
 
     }
 }

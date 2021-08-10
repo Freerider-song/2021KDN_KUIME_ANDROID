@@ -163,7 +163,7 @@ public class ActivityLogin extends AppCompatActivity implements IaResultHandler 
                     CaApplication.m_Info.bPaid = jo.getInt("is_paid");
 
                     if(CaApplication.m_Info.bPaid != -1){
-                        CaApplication.m_Info.nServiceReservation = jo.getInt("service_reservation_id");
+                        CaApplication.m_Info.nServiceReservation = jo.getString("service_reservation_id");
                         CaApplication.m_Info.dtStart = CaApplication.m_Info.parseDate(jo.getString("start_time"));
                         CaApplication.m_Info.dtEnd = CaApplication.m_Info.parseDate(jo.getString("finish_time"));
                         CaApplication.m_Info.strStationName = jo.getString("station_name");

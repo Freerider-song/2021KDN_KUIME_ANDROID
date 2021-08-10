@@ -6,6 +6,7 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 
 
+import com.example.kuime.model.CaStation;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -87,7 +88,7 @@ public class CaInfo {
     public Date dtStart = null;
     public Date dtEnd = null;
 
-    public int nServiceReservation = 0;
+    public String nServiceReservation = "";
     public int bPaid = 0;
     public double dDx = 0.0;
     public double dDy = 0.0;
@@ -95,6 +96,7 @@ public class CaInfo {
 
     public boolean bCarRegistered = false;
 
+    public ArrayList<CaStation> alStation = new ArrayList<>();
     /*
     public int m_nAuthType=CaEngine.AUTH_TYPE_UNKNOWN;
 

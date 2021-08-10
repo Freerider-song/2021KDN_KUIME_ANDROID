@@ -104,7 +104,8 @@ public class ActivityMap extends AppCompatActivity implements IaResultHandler, O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        CaApplication.m_Engine.GetStationInfo(this,this);
+        //CaApplication.m_Engine.GetStationInfo(this,this);
+        alStation = CaApplication.m_Info.alStation;
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -129,6 +130,8 @@ public class ActivityMap extends AppCompatActivity implements IaResultHandler, O
         markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
         mMap.addMarker(markerOptions);
 
+        Log.i("MAP", "마커설정시 alStation 길이 " + alStation.size());
+
         for(int i = 0; i<alStation.size(); i++){
             CaStation station = alStation.get(i);
             markerOptions
@@ -147,11 +150,15 @@ public class ActivityMap extends AppCompatActivity implements IaResultHandler, O
                 bundle.putString("station_name", marker.getTitle());
                 for(int i = 0; i<alStation.size(); i++){
                     CaStation station = alStation.get(i);
-                    if(station.strStationName == marker.getTitle()){
+                    //Log.i("Map", "충전소 이름찾기 " + marker.getTitle() + " = " + station.strStationName);
+                    if(station.strStationName.equals(marker.getTitle())){
                         CaApplication.m_Info.nStationId = station.nStationId;
                         CaApplication.m_Info.nSlowCharger = station.nSlowCharger;
                         CaApplication.m_Info.nFastCharger = station.nFastCharger;
                         CaApplication.m_Info.nV2gCharger = station.nV2gCharger;
+
+                        Log.i("Map", "충전기 갯수들 " + CaApplication.m_Info.nFastCharger + " " + CaApplication.m_Info.nV2gCharger +
+                                " " + CaApplication.m_Info.nSlowCharger);
                     }
                 }
                 bundle.putString("charger_num", marker.getSnippet());
@@ -226,7 +233,7 @@ public class ActivityMap extends AppCompatActivity implements IaResultHandler, O
 
         switch (Result.m_nCallback) {
             case CaEngine.GET_STATION_INFO: {
-
+                Log.i("MAP" , "GetStationInfo called");
                 try {
                     JSONObject jo = Result.object;
                     JSONArray ja = jo.getJSONArray("features");
@@ -236,23 +243,25 @@ public class ActivityMap extends AppCompatActivity implements IaResultHandler, O
                     for(int i=0;i<ja.length();i++){
                         JSONObject joStation = ja.getJSONObject(i);
                         CaStation station = new CaStation();
-                        JSONArray jaGeometry = joStation.getJSONArray("geometry");
-                        JSONArray jaProperties = joStation.getJSONArray("properties");
+                        JSONObject joGeometry = joStation.getJSONObject("geometry");
+                        JSONObject joProperties = joStation.getJSONObject("properties");
 
-                        JSONObject joGeometry = jaGeometry.getJSONObject(0);
+                        //JSONObject joGeometry = jaGeometry.getJSONObject(0);
                         JSONArray jaDxy =joGeometry.getJSONArray("coordinates");
                         station.dx = jaDxy.getDouble(0);
                         station.dy = jaDxy.getDouble(1);
 
-                        JSONObject joProperties = jaProperties.getJSONObject(0);
+
+                        //JSONObject joProperties = jaProperties.getJSONObject(0);
                         station.nFastCharger = joProperties.getInt("fast_charger");
                         station.nSlowCharger = joProperties.getInt("slow_charger");
                         station.nStationId = joProperties.getInt("station_id");
                         station.strStationName = joProperties.getString("station_name");
                         station.nV2gCharger = joProperties.getInt("v2g");
-
+                        Log.i("MAP", "StationNAme = " +station.strStationName  + " " + station.dx + " " +station.dy);
                         alStation.add(station);
                     }
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
