@@ -89,9 +89,16 @@ public class ActivityCharge extends AppCompatActivity implements IaResultHandler
         long calHour = calDate / (60*60*1000);
         long calMin = calDate % (60*60*1000);
         tvCompleteUntil.setText("서비스 완료까지 " + calHour + ":" + calMin + " 남았어요.");
-        tvEfficiency.setText(String.format("%.0f", CaApplication.m_Info.dBatteryCapacity
-                * (double)nCurrentCap
-                / 100 * CaApplication.m_Info.dEfficiency)+ "km를 달릴 수 있어요!");
+
+        if(CaApplication.m_Info.dEfficiency !=0.1){
+            tvEfficiency.setText(String.format("%.0f", CaApplication.m_Info.dBatteryCapacity
+                    * (double)nCurrentCap
+                    / 100 * CaApplication.m_Info.dEfficiency)+ "km를 달릴 수 있어요!");
+        }
+        else{
+            tvEfficiency.setVisibility(View.INVISIBLE);
+        }
+
     }
 
     @Override

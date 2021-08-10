@@ -111,7 +111,7 @@ public class ActivityReserveCharger extends AppCompatActivity {
         Random random = new Random();
         CaCharger charger = new CaCharger();
         for(int i=0; i<CaApplication.m_Info.nV2gCharger; i++){
-            charger.strChargerName = Integer.toString(i+1)+" V2G 충전기";
+            charger.strChargerName = "V2G 충전기";
             charger.bUsed = false;
             alCharger.add(charger);
         }

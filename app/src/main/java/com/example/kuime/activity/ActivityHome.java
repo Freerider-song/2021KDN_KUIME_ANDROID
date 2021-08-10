@@ -45,10 +45,13 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
         now = System.currentTimeMillis();
         mNow = new Date(now);
 
-        long calDate = CaApplication.m_Info.dtEnd.getTime() - CaApplication.m_Info.dtStart.getTime();
-        long calNow = CaApplication.m_Info.dtEnd.getTime() - now;
-        CaApplication.m_Info.dReserveTimeRatio = calNow / (double) calDate;
-        Log.d("HOME", "ReserveTimeRatio is " + CaApplication.m_Info.dReserveTimeRatio);
+        if(CaApplication.m_Info.dtStart != null && CaApplication.m_Info.dtEnd != null){
+            long calDate = CaApplication.m_Info.dtEnd.getTime() - CaApplication.m_Info.dtStart.getTime();
+            long calNow = CaApplication.m_Info.dtEnd.getTime() - now;
+            CaApplication.m_Info.dReserveTimeRatio = calNow / (double) calDate;
+            Log.d("HOME", "ReserveTimeRatio is " + CaApplication.m_Info.dReserveTimeRatio);
+        }
+
 
         int nCurrentCap = m_Pref.getValue(PREF_CURRENT_CAP, 45);
 
@@ -65,7 +68,7 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
         tvStation.setText(CaApplication.m_Info.strStationName);
         tvCar.setText(CaApplication.m_Info.strCarModel);
         //tvMargin
-        if(CaApplication.m_Info.bPaid == 1){
+        if(CaApplication.m_Info.bPaid == 1 || CaApplication.m_Info.bPaid == -1){ //이용중인 서비스가 없을 때
             tvName.setVisibility(View.INVISIBLE);
             tvStation.setVisibility(View.INVISIBLE);
             tvCar.setVisibility(View.INVISIBLE);
@@ -74,6 +77,8 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
             tvCurrentCap.setVisibility(View.INVISIBLE);
             ivNext.setVisibility(View.INVISIBLE);
             ivBattery.setVisibility(View.INVISIBLE);
+
+            tvEmpty.setVisibility(View.VISIBLE);
 
         }
         else{
@@ -139,11 +144,11 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
             break;
 
             case R.id.cl_charge_page: {
-                if(CaApplication.m_Info.bPaid == 0 && CaApplication.m_Info.dtEnd.before(mNow)){
+                if(CaApplication.m_Info.bPaid == 0 && CaApplication.m_Info.dtEnd.before(mNow)){ //아직 결제 전이며, 서비스 이용 시간 이후인 경우
                     Intent it = new Intent(this, ActivityChargeResult.class);
                     startActivity(it);
                 }
-                else if(CaApplication.m_Info.bPaid == 0 && mNow.before(CaApplication.m_Info.dtEnd)){
+                else if(CaApplication.m_Info.bPaid == 0 && mNow.before(CaApplication.m_Info.dtEnd)){ //아직 결제 전이며, 서비스 이용 시간인 경우
                     Intent it = new Intent(this, ActivityCharge.class);
                     startActivity(it);
                 }

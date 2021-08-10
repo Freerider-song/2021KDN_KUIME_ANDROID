@@ -29,6 +29,7 @@ public class CaInfo {
     public SimpleDateFormat m_dfyyyyMMddhhmmss=new SimpleDateFormat("yyyyMMddHHmmss");
     public SimpleDateFormat m_dfyyyyMMdd=new SimpleDateFormat("yyyyMMdd");
     public SimpleDateFormat m_dfyyyyMMddhhmm_ampm=new SimpleDateFormat("yyyy-MM-dd hh:mm a");
+    public SimpleDateFormat m_dfAPI = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
 
     public DecimalFormat m_dfKwh = new DecimalFormat("0.#"); // 12345.7
     public DecimalFormat m_dfPercent = new DecimalFormat("0.##"); // 12345.7
@@ -70,7 +71,7 @@ public class CaInfo {
     public int nSlowCharger = 0;
     public int nV2gCharger = 0;
 
-    public double dReserveTimeRatio = 0.1;
+    public double dReserveTimeRatio = 1.0;
 
     public String strChargerName = "";
 
@@ -135,7 +136,7 @@ public class CaInfo {
         Date dt;
 
         try {
-            dt = CaApplication.m_Info.m_dfStd.parse(str);
+            dt = CaApplication.m_Info.m_dfAPI.parse(str);
         }
         catch (ParseException e) {
             // e.printStackTrace();

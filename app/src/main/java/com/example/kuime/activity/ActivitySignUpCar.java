@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -49,66 +50,12 @@ public class ActivitySignUpCar extends AppCompatActivity implements IaResultHand
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up_car);
-
         CaApplication.m_Engine.GetCarCompanyInfo(this,this);
-        spCompany = findViewById(R.id.sp_car_company);
-        spModel = findViewById(R.id.sp_car_model);
-
-
-        ArrayAdapter AdapterModel = new ArrayAdapter<String>(this, R.layout.spinner_layout, alStrModel);
-
-        ArrayAdapter<String> AdapterCompany = new ArrayAdapter<String>(this, R.layout.spinner_layout, alCompany);
-
-        spCompany.setEnabled(true);
-        spModel.setEnabled(true);
-
-        spCompany.setAdapter(AdapterCompany);
-        spModel.setAdapter(AdapterModel);
-
-        //AdapterMeter.setDropDownViewResource(R.layout.eg_spinner_item_style);
-
-        spCompany.setSelection(nCompany);
-        spModel.setSelection(nModel);
-
-
-        spCompany.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                nCompany=position;
-                CaApplication.m_Info.strCarCompany = alCompany.get(nCompany);
-                getCarModelInfo(nCompany);
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-
-
 
     }
 
     public void getCarModelInfo(int nCompany){
-
         CaApplication.m_Engine.GetCarModelInfo(alCompany.get(nCompany), this, this);
-        spModel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                nModel=position;
-                CaCarModel model = alModel.get(nModel);
-                CaApplication.m_Info.strCarModel = model.strModelName;
-                CaApplication.m_Info.nModelId = model.nModelId;
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
     }
 
@@ -157,6 +104,41 @@ public class ActivitySignUpCar extends AppCompatActivity implements IaResultHand
 
                     }
 
+                    ArrayAdapter<String> AdapterCompany = new ArrayAdapter<String>(this, R.layout.spinner_layout, alCompany){
+                        @NonNull
+                        @Override
+                        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+
+                            View v = super.getView(position, convertView, parent);
+                            ((TextView) v).setTextSize(24.0f);
+                            ((TextView) v).setTextColor(getResources().getColor(R.color.ks_gray));
+                            return v;
+
+                        }
+                    };
+
+                    spCompany.setEnabled(true);
+                    spCompany = findViewById(R.id.sp_car_company);
+                    spCompany.setAdapter(AdapterCompany);
+                    spCompany.setSelection(nCompany);
+
+                    spCompany.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            nCompany=position;
+                            CaApplication.m_Info.strCarCompany = alCompany.get(nCompany);
+                            ((TextView)parent.getChildAt(0)).setTextColor(Color.BLACK);
+                            CaApplication.m_Engine.GetCarModelInfo(alCompany.get(nCompany), ActivitySignUpCar.this, ActivitySignUpCar.this);
+
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
+
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -175,10 +157,45 @@ public class ActivitySignUpCar extends AppCompatActivity implements IaResultHand
                         CaCarModel model=new CaCarModel();
                         model.nModelId = joModel.getInt("model_id");
                         model.strModelName = joModel.getString("model_name");
+
                         alStrModel.add(joModel.getString("model_name"));
 
                         alModel.add(model);
                     }
+
+                    spModel = findViewById(R.id.sp_car_model);
+                    ArrayAdapter AdapterModel = new ArrayAdapter<String>(this, R.layout.spinner_layout, alStrModel){
+                        @NonNull
+                        @Override
+                        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+
+                            View v = super.getView(position, convertView, parent);
+
+                            ((TextView) v).setTextSize(24.0f);
+                            ((TextView) v).setTextColor(getResources().getColor(R.color.ks_gray));
+                            return v;
+
+                        }
+                    };
+                    spModel.setEnabled(true);
+                    spModel.setAdapter(AdapterModel);
+                    spModel.setSelection(nModel);
+                    spModel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            nModel=position;
+                            CaCarModel model = alModel.get(nModel);
+                            CaApplication.m_Info.strCarModel = model.strModelName;
+                            CaApplication.m_Info.nModelId = model.nModelId;
+                            ((TextView)parent.getChildAt(0)).setTextColor(Color.BLACK);
+
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
 
 
                 } catch (JSONException e) {

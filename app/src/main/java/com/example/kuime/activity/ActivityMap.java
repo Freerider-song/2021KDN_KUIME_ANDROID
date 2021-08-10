@@ -249,7 +249,7 @@ public class ActivityMap extends AppCompatActivity implements IaResultHandler, O
                         station.nSlowCharger = joProperties.getInt("slow_charger");
                         station.nStationId = joProperties.getInt("station_id");
                         station.strStationName = joProperties.getString("station_name");
-                        station.nV2gCharger = joProperties.getInt("v2g_charger");
+                        station.nV2gCharger = joProperties.getInt("v2g");
 
                         alStation.add(station);
                     }

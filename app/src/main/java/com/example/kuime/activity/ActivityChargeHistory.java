@@ -44,6 +44,9 @@ public class ActivityChargeHistory extends AppCompatActivity implements IaResult
 
     String strYearMonth;
 
+    TextView tvEmpty;
+    ListView listView;
+
     ArrayList<CaHistory> alHistory = new ArrayList<>();
 
     private EgMonthPicker m_dlgMonthPicker;
@@ -139,7 +142,8 @@ public class ActivityChargeHistory extends AppCompatActivity implements IaResult
         timeSetting();
         getChargeHistory();
 
-        ListView listView = findViewById(R.id.lv_charge_history);
+        tvEmpty = findViewById(R.id.tv_empty);
+        listView = findViewById(R.id.lv_charge_history);
 
         m_ChargeHistoryAdapter= new ChargeHistoryAdapter();
 
@@ -209,23 +213,30 @@ public class ActivityChargeHistory extends AppCompatActivity implements IaResult
 
                 try {
                     JSONObject jo = Result.object;
-                    JSONArray ja = jo.getJSONArray("list_history");
-
-                    alHistory.clear();
-
-                    for(int i=0;i<ja.length();i++){
-                        JSONObject joHistory = ja.getJSONObject(i);
-                        CaHistory history = new CaHistory();
-
-                        history.dtReserve = CaApplication.m_Info.parseDate(joHistory.getString("reserve_time"));
-                        history.nReserveType = joHistory.getInt("reserve_type");
-                        history.nFee = joHistory.getInt("expected_fee");
-
-                        if(mYearMonth.format(history.dtReserve) == strYearMonth){
-                            alHistory.add(history);
-                        }
-
+                    if(jo.getInt("result_code")==0){
+                        tvEmpty.setVisibility(View.VISIBLE);
                     }
+                    else{
+                        tvEmpty.setVisibility(View.INVISIBLE);
+                        JSONArray ja = jo.getJSONArray("list_history");
+
+                        alHistory.clear();
+
+                        for(int i=0;i<ja.length();i++){
+                            JSONObject joHistory = ja.getJSONObject(i);
+                            CaHistory history = new CaHistory();
+
+                            history.dtReserve = CaApplication.m_Info.parseDate(joHistory.getString("reserve_time"));
+                            history.nReserveType = joHistory.getInt("reserve_type");
+                            history.nFee = joHistory.getInt("expected_fee");
+
+                            if(mYearMonth.format(history.dtReserve) == strYearMonth){
+                                alHistory.add(history);
+                            }
+
+                        }
+                    }
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();

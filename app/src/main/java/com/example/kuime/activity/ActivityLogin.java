@@ -152,17 +152,22 @@ public class ActivityLogin extends AppCompatActivity implements IaResultHandler 
             case CaEngine.GET_HOME_INFO: {
 
                 try {
+                    Log.i("LOGIN", "GetHomeInfo Called...");
                     JSONObject jo = Result.object;
                     CaApplication.m_Info.strName = jo.getString("name");
-                    CaApplication.m_Info.strCarModel = jo.getString("car_model");
-                    CaApplication.m_Info.dEfficiency = jo.getDouble("efficiency");
+                    CaApplication.m_Info.strCarModel = jo.getString("car_model_name");
+                    if(jo.getString("efficiency") !="정보없음"){
+                        CaApplication.m_Info.dEfficiency = jo.getDouble("efficiency");
+                    }
                     CaApplication.m_Info.dBatteryCapacity = jo.getDouble("battery_capacity");
                     CaApplication.m_Info.bPaid = jo.getInt("is_paid");
-                    CaApplication.m_Info.nServiceReservation = jo.getInt("service_reservation_id");
-                    CaApplication.m_Info.dtStart = CaApplication.m_Info.parseDate(jo.getString("start_time"));
-                    CaApplication.m_Info.dtEnd = CaApplication.m_Info.parseDate(jo.getString("finish_time"));
-                    CaApplication.m_Info.strStationName = jo.getString("station_name");
 
+                    if(CaApplication.m_Info.bPaid != -1){
+                        CaApplication.m_Info.nServiceReservation = jo.getInt("service_reservation_id");
+                        CaApplication.m_Info.dtStart = CaApplication.m_Info.parseDate(jo.getString("start_time"));
+                        CaApplication.m_Info.dtEnd = CaApplication.m_Info.parseDate(jo.getString("finish_time"));
+                        CaApplication.m_Info.strStationName = jo.getString("station_name");
+                    }
                     Intent it = new Intent(this, ActivityHome.class);
                     startActivity(it);
 

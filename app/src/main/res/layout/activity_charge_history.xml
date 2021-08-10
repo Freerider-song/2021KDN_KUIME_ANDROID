@@ -50,6 +50,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btn_back" />
 
+    <TextView
+        android:id="@+id/tv_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:lineSpacingExtra="8sp"
+        android:onClick="onClick"
+        android:text="이용 내역이 없습니다."
+        android:textColor="@color/km_main_color"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_saving_fee" />
+
     <ListView
         android:id="@+id/lv_charge_history"
         android:layout_width="0dp"
@@ -62,7 +77,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_saving_fee" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_saving_fee" >
+
+    </ListView>
 
     <Button
         android:id="@+id/btn_month_picker"

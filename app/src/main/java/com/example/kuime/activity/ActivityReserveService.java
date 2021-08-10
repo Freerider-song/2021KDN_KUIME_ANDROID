@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.kuime.CaApplication;
@@ -16,6 +17,7 @@ import static com.example.kuime.CaApplication.m_Context;
 public class ActivityReserveService extends AppCompatActivity {
 
     CaPref m_Pref;
+    Button btnCharge,btnDischarge, btnBoth;
 
    @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,15 @@ public class ActivityReserveService extends AppCompatActivity {
         TextView tvCurrent = findViewById(R.id.tv_current_capacity);
         tvCurrent.setText("현재 배터리는 \n" + nCurrentCap+
                 "% 입니다");
+
+        btnBoth = findViewById(R.id.btn_charge_both);
+        btnCharge = findViewById(R.id.btn_charge_only);
+        btnDischarge = findViewById(R.id.btn_discharge_only);
+
+        if(CaApplication.m_Info.strChargerName !="V2G 충전기"){
+            btnDischarge.setEnabled(false);
+            btnBoth.setEnabled(false);
+        }
     }
 
     public void onClick(View v) {
