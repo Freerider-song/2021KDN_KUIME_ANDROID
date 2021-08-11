@@ -62,14 +62,15 @@ public class ActivityCharge extends AppCompatActivity implements IaResultHandler
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_charge);
 
-        CaApplication.m_Engine.GetChargeInfo(CaApplication.m_Info.nServiceReservation, this, this);
+        //CaApplication.m_Engine.GetChargeInfo(CaApplication.m_Info.nServiceReservation, this, this);
 
         m_Context = getApplicationContext();
         m_Pref = new CaPref(m_Context);
         mNow = new Date(System.currentTimeMillis());
 
 
-        int nCurrentCap = m_Pref.getValue(PREF_CURRENT_CAP, 45);
+        //int nCurrentCap = m_Pref.getValue(PREF_CURRENT_CAP, 45);
+        int nCurrentCap = CaApplication.m_Info.nCurrentCap;
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -182,21 +183,8 @@ public class ActivityCharge extends AppCompatActivity implements IaResultHandler
         }
 
         switch (Result.m_nCallback) {
-            case CaEngine.GET_CHARGE_INFO: {
 
-                try {
-                    JSONObject jo = Result.object;
-                    CaApplication.m_Info.nReserveType = jo.getInt("reserve_type");
-                    CaApplication.m_Info.dtEnd = CaApplication.m_Info.parseDate(jo.getString("finish_time"));
-                    CaApplication.m_Info.nExpectedFee = jo.getInt("expected_fee");
-                    CaApplication.m_Info.dDx = jo.getDouble("dx");
-                    CaApplication.m_Info.dDy = jo.getDouble("dy");
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            break;
 
             case CaEngine.STOP_CHARGE: {
                 JSONObject jo = Result.object;

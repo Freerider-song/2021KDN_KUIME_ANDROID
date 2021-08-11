@@ -81,7 +81,7 @@ public class ActivityChargeHistory extends AppCompatActivity implements IaResult
 
         @Override
         public int getCount() {
-
+            Log.i("ChargeHistory" , "alHistory size in listview" + alHistory.size());
             //return plan.m_alAct.size();
             return alHistory.size();
         }
@@ -121,15 +121,15 @@ public class ActivityChargeHistory extends AppCompatActivity implements IaResult
 
             holder.tvChargeDate.setText(mMonthDay.format(history.dtReserve));
             if(history.nReserveType == 1){
-                holder.tvChargeType.setText("충전");
+                holder.tvChargeType.setText("타입: 충전");
             }
             else if(history.nReserveType == 2){
-                holder.tvChargeType.setText("방전");
+                holder.tvChargeType.setText("타입: 방전");
             }
             else if(history.nReserveType == 3){
-                holder.tvChargeType.setText("충/방전");
+                holder.tvChargeType.setText("타입: 충/방전");
             }
-            holder.tvEarningFee.setText(history.nFee);
+            holder.tvEarningFee.setText(history.nFee +"원");
 
             return convertView;
         }
@@ -213,7 +213,7 @@ public class ActivityChargeHistory extends AppCompatActivity implements IaResult
 
                 try {
                     JSONObject jo = Result.object;
-                    if(jo.getJSONArray("list_history")!=null){
+                    if(jo.getJSONArray("list_history")==null){
                         tvEmpty.setVisibility(View.VISIBLE);
                     }
                     else{
@@ -221,6 +221,7 @@ public class ActivityChargeHistory extends AppCompatActivity implements IaResult
                         JSONArray ja = jo.getJSONArray("list_history");
 
                         alHistory.clear();
+                        Log.i("ChargeHistory" , "ja size" + ja.length());
 
                         for(int i=0;i<ja.length();i++){
                             JSONObject joHistory = ja.getJSONObject(i);
@@ -230,11 +231,13 @@ public class ActivityChargeHistory extends AppCompatActivity implements IaResult
                             history.nReserveType = joHistory.getInt("reserve_type");
                             history.nFee = joHistory.getInt("expected_fee");
 
-                            if(mYearMonth.format(history.dtReserve) == strYearMonth){
+                            if(mYearMonth.format(history.dtReserve).equals(strYearMonth)){
                                 alHistory.add(history);
                             }
 
+
                         }
+                        Log.i("ChargeHistory" , "alHistory size" + alHistory.size());
                         m_ChargeHistoryAdapter.notifyDataSetChanged();
                     }
 

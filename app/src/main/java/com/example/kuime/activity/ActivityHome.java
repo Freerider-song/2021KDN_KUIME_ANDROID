@@ -55,7 +55,8 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
             CaApplication.m_Info.dtStart = mNow; //시작시간을 현재시간으로 바꿔주어서 나중에 다시 이 화면에 들어오게 되었을 때 RTRatio 가 현실 반영하게끔 바꿔줌
         }
         //m_Pref.setValue(PREF_CURRENT_CAP, 45);
-        int nCurrentCap = m_Pref.getValue(PREF_CURRENT_CAP, 45);
+        //int nCurrentCap = m_Pref.getValue(PREF_CURRENT_CAP, 45);
+        int nCurrentCap = CaApplication.m_Info.nCurrentCap; //nCurrentCap = 45
         if(nCurrentCap ==0){
             m_Pref.setValue(PREF_CURRENT_CAP, 45);
             nCurrentCap = m_Pref.getValue(PREF_CURRENT_CAP, 45);
@@ -105,7 +106,8 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
 
             if(CaApplication.m_Info.dReserveTimeRatio <=1){ //1 이상이면 아직 충전 시작 시간이 되지 않았다는 것
                 nCurrentCap = (int)Math.round((100-nCurrentCap)*CaApplication.m_Info.dReserveTimeRatio + nCurrentCap);
-                m_Pref.setValue(PREF_CURRENT_CAP, nCurrentCap);
+                CaApplication.m_Info.nCurrentCap = nCurrentCap;
+                //m_Pref.setValue(PREF_CURRENT_CAP, nCurrentCap);
             }
 
             tvCurrentCap.setText(Integer.toString(nCurrentCap)+ "%");
@@ -136,7 +138,7 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
         m_Pref = new CaPref(m_Context);
         now = System.currentTimeMillis();
         mNow = new Date(now);
-
+/*
         if(CaApplication.m_Info.dtStart != null && CaApplication.m_Info.dtEnd != null){
             long calDate = CaApplication.m_Info.dtEnd.getTime() - CaApplication.m_Info.dtStart.getTime();
             long calNow = now-CaApplication.m_Info.dtStart.getTime();
@@ -216,7 +218,7 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
             else if(nCurrentCap <=100) {
                 ivBattery.setImageDrawable(getDrawable(R.drawable.battery5));
             }
-        }
+        }*/
 
     }
 
@@ -246,8 +248,8 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
                     startActivity(it);
                 }
                 else if(CaApplication.m_Info.bPaid == 0 && mNow.before(CaApplication.m_Info.dtEnd)){ //아직 결제 전이며, 서비스 이용 시간인 경우
-                    Intent it = new Intent(this, ActivityCharge.class);
-                    startActivity(it);
+                    CaApplication.m_Engine.GetChargeInfo(CaApplication.m_Info.nServiceReservation, this, this);
+
                 }
 
             }
@@ -297,6 +299,24 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
                     Intent it = new Intent(this, ActivityMap.class);
                     startActivity(it);
 
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            break;
+
+            case CaEngine.GET_CHARGE_INFO: {
+
+                try {
+                    JSONObject jo = Result.object;
+                    CaApplication.m_Info.nReserveType = jo.getInt("reserve_type");
+                    CaApplication.m_Info.dtEnd = CaApplication.m_Info.parseDate(jo.getString("finish_time"));
+                    CaApplication.m_Info.nExpectedFee = jo.getInt("expected_fee");
+                    CaApplication.m_Info.dDy = jo.getDouble("dx");
+                    CaApplication.m_Info.dDx = jo.getDouble("dy");
+
+                    Intent it = new Intent(this, ActivityCharge.class);
+                    startActivity(it);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

@@ -144,7 +144,11 @@ public class CaTask extends AsyncTask<CaArg, Void, CaResult> {
         if (null != m_ResultHandler) {
 
             if (m_ResultHandler instanceof IaResultHandler) {
-                m_ResultHandler.onResult(mdlResult);
+                try {
+                    m_ResultHandler.onResult(mdlResult);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

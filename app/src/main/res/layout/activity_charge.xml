@@ -38,26 +38,28 @@
                 android:id="@+id/imageView19"
                 android:layout_width="10dp"
                 android:layout_height="10dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginStart="30dp"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_station"
-                app:layout_constraintEnd_toStartOf="@+id/tv_station"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tv_station"
                 app:srcCompat="@drawable/small_dot_pink" />
 
             <TextView
                 android:id="@+id/tv_station"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
-                android:gravity="center_horizontal"
+                android:layout_marginEnd="20dp"
+                android:gravity="left"
                 android:lineSpacingExtra="8sp"
                 android:text="애월 1 충전소 / 2충전기"
                 android:textColor="@color/ks_gray"
                 android:textSize="24dp"
                 android:textStyle="normal"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.3"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/imageView19"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <fragment

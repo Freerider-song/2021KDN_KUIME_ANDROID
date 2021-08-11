@@ -156,7 +156,7 @@ public class CaEngine {
         Log.i("ENGINE", "GetChargeInfo called");
 
         CaArg Arg = new CaArg("GetChargeInfo", NO_CMD_ARGS, null);
-        Arg.addArg("Service_reservation_id", ServiceReservationId);
+        Arg.addArg("Service_reservation_Id", ServiceReservationId);
 
         executeCommand(Arg, GET_CHARGE_INFO, false, true, Ctx, ResultHandler);
     }

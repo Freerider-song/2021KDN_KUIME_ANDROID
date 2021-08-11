@@ -76,7 +76,7 @@ public class CaInfo {
 
     public String strChargerName = "";
 
-    //public int nCurrentCapacity = 0;
+    public int nCurrentCap = 45;
     public int nMinCapacity = 0;
 
     public double dBatteryCapacity = 0.0;

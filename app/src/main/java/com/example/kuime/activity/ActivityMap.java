@@ -152,6 +152,7 @@ public class ActivityMap extends AppCompatActivity implements IaResultHandler, O
                     CaStation station = alStation.get(i);
                     //Log.i("Map", "충전소 이름찾기 " + marker.getTitle() + " = " + station.strStationName);
                     if(station.strStationName.equals(marker.getTitle())){
+                        CaApplication.m_Info.strStationName = station.strStationName;
                         CaApplication.m_Info.nStationId = station.nStationId;
                         CaApplication.m_Info.nSlowCharger = station.nSlowCharger;
                         CaApplication.m_Info.nFastCharger = station.nFastCharger;
