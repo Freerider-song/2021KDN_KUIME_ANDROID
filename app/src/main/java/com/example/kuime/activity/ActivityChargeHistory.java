@@ -213,7 +213,7 @@ public class ActivityChargeHistory extends AppCompatActivity implements IaResult
 
                 try {
                     JSONObject jo = Result.object;
-                    if(jo.getInt("result_code")==0){
+                    if(jo.getJSONArray("list_history")!=null){
                         tvEmpty.setVisibility(View.VISIBLE);
                     }
                     else{
@@ -235,6 +235,7 @@ public class ActivityChargeHistory extends AppCompatActivity implements IaResult
                             }
 
                         }
+                        m_ChargeHistoryAdapter.notifyDataSetChanged();
                     }
 
 

@@ -84,16 +84,20 @@ public class ActivityCharge extends AppCompatActivity implements IaResultHandler
         tvEfficiency = findViewById(R.id.tv_efficiency);
 
         tvFee.setText(CaApplication.m_Info.m_dfWon.format(CaApplication.m_Info.nExpectedFee * CaApplication.m_Info.dReserveTimeRatio)+ "원");
+        tvStation.setText(CaApplication.m_Info.strStationName + " / " + CaApplication.m_Info.strChargerName);
 
         long calDate = CaApplication.m_Info.dtEnd.getTime() - mNow.getTime();
-        long calHour = calDate / (60*60*1000);
-        long calMin = calDate % (60*60*1000);
-        tvCompleteUntil.setText("서비스 완료까지 " + calHour + ":" + calMin + " 남았어요.");
+        long calMin = calDate / (60*1000);
+        long calHour = calMin / 60;
+        long calMinute = calMin % 60;
+        tvCompleteUntil.setText("서비스 완료까지 " + calHour + ":" + calMinute + " 남았어요.");
+        tvCompleteUntil.setTextColor(getResources().getColor(R.color.eg_menu_blue));
 
         if(CaApplication.m_Info.dEfficiency !=0.1){
             tvEfficiency.setText(String.format("%.0f", CaApplication.m_Info.dBatteryCapacity
                     * (double)nCurrentCap
                     / 100 * CaApplication.m_Info.dEfficiency)+ "km를 달릴 수 있어요!");
+            tvEfficiency.setTextColor(getResources().getColor(R.color.bright_red));
         }
         else{
             tvEfficiency.setVisibility(View.INVISIBLE);
@@ -171,7 +175,7 @@ public class ActivityCharge extends AppCompatActivity implements IaResultHandler
     }
 
     @Override
-    public void onResult(CaResult Result) {
+    public void onResult(CaResult Result) throws JSONException {
         if (Result.object == null) {
             Toast.makeText(m_Context, "Check Network", Toast.LENGTH_SHORT).show();
             return;
@@ -195,8 +199,40 @@ public class ActivityCharge extends AppCompatActivity implements IaResultHandler
             break;
 
             case CaEngine.STOP_CHARGE: {
-
+                JSONObject jo = Result.object;
+                int nResultCode = jo.getInt("result_code");
                 Log.i("Charge", "StopCharge Result arrived...");
+
+                if(nResultCode == 0 ){
+                    AlertDialog.Builder dlg = new AlertDialog.Builder(ActivityCharge.this);
+                    dlg.setTitle("실패"); //제목
+                    dlg.setMessage("서비스를 중단하지 못했습니다."); // 메시지
+
+                    dlg.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+
+                        }
+                    });
+
+                    dlg.show();
+                }
+                else if(nResultCode == 1){
+                    AlertDialog.Builder dlg = new AlertDialog.Builder(ActivityCharge.this);
+                    dlg.setTitle("확인"); //제목
+                    dlg.setMessage("중단 완료되었습니다. 결제 화면으로 넘어갑니다."); // 메시지
+
+                    dlg.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            Intent it = new Intent(ActivityCharge.this, ActivityChargeResult.class);
+                            startActivity(it);
+
+                        }
+                    });
+
+                    dlg.show();
+                }
             }
             break;
 

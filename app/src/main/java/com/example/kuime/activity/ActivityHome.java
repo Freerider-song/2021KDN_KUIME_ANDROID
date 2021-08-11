@@ -42,6 +42,89 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
     protected  void onResume() {
 
         super.onResume();
+        m_Context = getApplicationContext();
+        m_Pref = new CaPref(m_Context);
+        now = System.currentTimeMillis();
+        mNow = new Date(now);
+
+        if(CaApplication.m_Info.dtStart != null && CaApplication.m_Info.dtEnd != null){
+            long calDate = CaApplication.m_Info.dtEnd.getTime() - CaApplication.m_Info.dtStart.getTime();
+            long calNow = now-CaApplication.m_Info.dtStart.getTime();
+            CaApplication.m_Info.dReserveTimeRatio = calNow / (double) calDate;
+            Log.d("HOME", "ReserveTimeRatio is " + CaApplication.m_Info.dReserveTimeRatio);
+            CaApplication.m_Info.dtStart = mNow; //시작시간을 현재시간으로 바꿔주어서 나중에 다시 이 화면에 들어오게 되었을 때 RTRatio 가 현실 반영하게끔 바꿔줌
+        }
+        //m_Pref.setValue(PREF_CURRENT_CAP, 45);
+        int nCurrentCap = m_Pref.getValue(PREF_CURRENT_CAP, 45);
+        if(nCurrentCap ==0){
+            m_Pref.setValue(PREF_CURRENT_CAP, 45);
+            nCurrentCap = m_Pref.getValue(PREF_CURRENT_CAP, 45);
+        }
+        Log.i("HOME", "current cap is " +nCurrentCap);
+
+        tvName = findViewById(R.id.tv_name);
+        tvStation = findViewById(R.id.tv_station);
+        tvCar = findViewById(R.id.tv_car_company);
+        tvReserveType = findViewById(R.id.tv_reserve_type);
+        tvMargin = findViewById(R.id.tv_margin);
+        tvCurrentCap = findViewById(R.id.tv_current_capacity);
+        tvEmpty = findViewById(R.id.tv_empty);
+        ivNext = findViewById(R.id.iv_next);
+        ivBattery = findViewById(R.id.iv_battery);
+        tvName.setText(CaApplication.m_Info.strName +"님, 환영합니다");
+        tvStation.setText(CaApplication.m_Info.strStationName);
+        tvCar.setText(CaApplication.m_Info.strCarModel);
+        //tvMargin
+        if(CaApplication.m_Info.bPaid == 1 || CaApplication.m_Info.bPaid == -1){ //이용중인 서비스가 없을 때
+            tvName.setVisibility(View.INVISIBLE);
+            tvStation.setVisibility(View.INVISIBLE);
+            tvCar.setVisibility(View.INVISIBLE);
+            tvReserveType.setVisibility(View.INVISIBLE);
+            tvMargin.setVisibility(View.INVISIBLE);
+            tvCurrentCap.setVisibility(View.INVISIBLE);
+            ivNext.setVisibility(View.INVISIBLE);
+            ivBattery.setVisibility(View.INVISIBLE);
+
+            tvEmpty.setVisibility(View.VISIBLE);
+
+        }
+        else{
+            tvEmpty.setVisibility(View.INVISIBLE);
+            if(CaApplication.m_Info.dtEnd.before(mNow)){
+                tvReserveType.setText("서비스가 완료되었어요!");
+            }
+            else if(mNow.before(CaApplication.m_Info.dtStart)){
+                tvReserveType.setText("서비스 이용 대기중이에요");
+            }
+            else if(CaApplication.m_Info.nReserveType == 2){
+                tvReserveType.setText("스마트한 방전 중이에요!");
+            }
+            else{
+                tvReserveType.setText("스마트한 충전 중이에요!");
+            }
+
+            if(CaApplication.m_Info.dReserveTimeRatio <=1){ //1 이상이면 아직 충전 시작 시간이 되지 않았다는 것
+                nCurrentCap = (int)Math.round((100-nCurrentCap)*CaApplication.m_Info.dReserveTimeRatio + nCurrentCap);
+                m_Pref.setValue(PREF_CURRENT_CAP, nCurrentCap);
+            }
+
+            tvCurrentCap.setText(Integer.toString(nCurrentCap)+ "%");
+            if(nCurrentCap <20) {
+                ivBattery.setImageDrawable(getDrawable(R.drawable.battery1));
+            }
+            else if(nCurrentCap <40) {
+                ivBattery.setImageDrawable(getDrawable(R.drawable.battery2));
+            }
+            else if(nCurrentCap <60) {
+                ivBattery.setImageDrawable(getDrawable(R.drawable.battery3));
+            }
+            else if(nCurrentCap <90) {
+                ivBattery.setImageDrawable(getDrawable(R.drawable.battery4));
+            }
+            else if(nCurrentCap <=100) {
+                ivBattery.setImageDrawable(getDrawable(R.drawable.battery5));
+            }
+        }
 
     }
     @Override
