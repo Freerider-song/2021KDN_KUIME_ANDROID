@@ -10,12 +10,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.kuime.CaApplication;
 import com.example.kuime.CaEngine;
+import com.example.kuime.CaPref;
 import com.example.kuime.CaResult;
 import com.example.kuime.IaResultHandler;
 import com.example.kuime.R;
@@ -27,28 +29,80 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import static com.example.kuime.CaApplication.m_Context;
 
 public class ActivityReserveTime extends AppCompatActivity implements IaResultHandler{
 
-    private TextView tvDateStart;
-    private TextView tvDateEnd;
-    private TextView tvTimeStart;
-    private TextView tvTimeEnd;
+    private EditText tvDateStart,tvDateEnd,tvTimeStart,tvTimeEnd;
+
+    int year, month, day, hour, minute;
 
     private DatePickerDialog.OnDateSetListener callbackMethod1;
     private DatePickerDialog.OnDateSetListener callbackMethod2;
     private TimePickerDialog.OnTimeSetListener callbackMethod3;
     private TimePickerDialog.OnTimeSetListener callbackMethod4;
+
+    CaPref m_Pref;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_reserve_time);
+
+        m_Context = getApplicationContext();
+        m_Pref = new CaPref(m_Context);
+
         tvDateStart = findViewById(R.id.tv_date_picker1);
         tvDateEnd = findViewById(R.id.tv_date_picker2);
         tvTimeStart = findViewById(R.id.tv_time_picker1);
         tvTimeEnd = findViewById(R.id.tv_time_picker2);
+
+        Calendar calendar = Calendar.getInstance();
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH) + 1;
+        day = calendar.get(Calendar.DATE);
+        hour = calendar.get(Calendar.HOUR_OF_DAY);
+        minute = calendar.get(Calendar.MINUTE);
+
+
+        if(month>9 && day>=10){
+            tvDateStart.setText(month + "/" + day);
+            tvDateEnd.setText(month + "/" + day);
+        }
+        else if(month<=9 && day>=10){
+            tvDateStart.setText("0"+month + "/" + day);
+            tvDateEnd.setText("0"+month + "/" + day);
+        }
+        else if(month>9 && day<10){
+            tvDateStart.setText(month+ "/0" + day);
+            tvDateEnd.setText(month+ "/0" + day);
+        }
+        else{
+            tvDateStart.setText("0"+month + "/0" + day);
+            tvDateEnd.setText("0"+month + "/0" + day);
+        }
+
+        if(hour>=10 & minute >=10){
+            tvTimeStart.setText(hour + ":" + minute);
+            tvTimeEnd.setText(hour + ":" + minute);
+        }
+        else if(hour >=10 && minute <10){
+            tvTimeStart.setText(hour + ":0" + minute);
+            tvTimeEnd.setText(hour + ":0" + minute);
+        }
+        else if(hour<10 && minute>=10){
+            tvTimeStart.setText("0"+hour + ":" + minute);
+            tvTimeEnd.setText("0"+hour + ":" + minute);
+        }
+        else {
+            tvTimeStart.setText("0"+hour + ":0" + minute);
+            tvTimeEnd.setText("0"+hour + ":0" + minute);
+        }
 
 
     }
@@ -61,7 +115,7 @@ public class ActivityReserveTime extends AppCompatActivity implements IaResultHa
             }
             break;
             case R.id.tv_date_picker1: {
-                DatePickerDialog dialog = new DatePickerDialog(this, callbackMethod1, 2021, 6, 26);
+                DatePickerDialog dialog = new DatePickerDialog(this, callbackMethod1, year, month, day);
                 dialog.show();
 
                 callbackMethod1 = new DatePickerDialog.OnDateSetListener()
@@ -89,7 +143,7 @@ public class ActivityReserveTime extends AppCompatActivity implements IaResultHa
             break;
 
             case R.id.tv_date_picker2: {
-                DatePickerDialog dialog = new DatePickerDialog(this, callbackMethod2, 2021, 6, 26);
+                DatePickerDialog dialog = new DatePickerDialog(this, callbackMethod2, year, month, day);
                 dialog.show();
 
                 callbackMethod2 = new DatePickerDialog.OnDateSetListener()
@@ -116,7 +170,7 @@ public class ActivityReserveTime extends AppCompatActivity implements IaResultHa
             break;
 
             case R.id.tv_time_picker1: {
-                TimePickerDialog dialog = new TimePickerDialog(this, callbackMethod3, 8, 10, true);
+                TimePickerDialog dialog = new TimePickerDialog(this, callbackMethod3, hour, minute, false);
 
                 dialog.show();
                 callbackMethod3 = new TimePickerDialog.OnTimeSetListener()
@@ -143,7 +197,7 @@ public class ActivityReserveTime extends AppCompatActivity implements IaResultHa
             break;
 
             case R.id.tv_time_picker2: {
-                TimePickerDialog dialog = new TimePickerDialog(this, callbackMethod4, 8, 10, true);
+                TimePickerDialog dialog = new TimePickerDialog(this, callbackMethod4,  hour, minute, false);
 
                 dialog.show();
                 callbackMethod4 = new TimePickerDialog.OnTimeSetListener()
@@ -186,11 +240,9 @@ public class ActivityReserveTime extends AppCompatActivity implements IaResultHa
 
                 CaApplication.m_Info.dtEnd = CaApplication.m_Info.parseDate(to);
 
-
-
                 CaApplication.m_Engine.SetReserveInfo(CaApplication.m_Info.strId, CaApplication.m_Info.nStationId, CaApplication.m_Info.nReserveType, from, to
                 , CaApplication.m_Info.nMinCapacity, 45, this, this);
-
+                m_Pref.setValue(CaPref.PREF_CURRENT_CAP, 45);
 
 
             }

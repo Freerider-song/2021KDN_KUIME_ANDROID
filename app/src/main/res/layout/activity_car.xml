@@ -7,7 +7,7 @@
     tools:context=".activity.ActivityCar">
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/btn_car"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -32,7 +32,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_charge_page"
         android:layout_width="0dp"
-        android:layout_height="200dp"
+        android:layout_height="250dp"
         android:background="@drawable/shape_squared_corner_shadow"
         android:elevation="20dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,24 +41,40 @@
         app:layout_constraintTop_toBottomOf="@+id/textView46">
 
         <TextView
-            android:id="@+id/textView17"
+            android:id="@+id/tv_car_company"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginTop="20dp"
-            android:text="현대 아이오닉 V5"
+            android:text="TESLA"
             android:textColor="@color/ks_gray"
             android:textSize="24dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/imageView6"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            app:layout_constraintStart_toStartOf="@+id/textView17"
-            app:layout_constraintTop_toBottomOf="@+id/textView17"
-            app:srcCompat="@drawable/electric_car" />
+        <TextView
+            android:id="@+id/tv_car_model"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="현대 아이오닉 V5"
+            android:textColor="@color/ks_gray"
+            android:textSize="30dp"
+            app:layout_constraintStart_toStartOf="@+id/tv_car_company"
+            app:layout_constraintTop_toBottomOf="@+id/tv_car_company" />
+
+        <TextView
+            android:id="@+id/tv_efficiency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:lineSpacingExtra="5dp"
+            android:text="연비: 5.3km/kW \n배터리 용량: 53kW"
+            android:textColor="@color/ks_gray"
+            android:textSize="24dp"
+            app:layout_constraintStart_toStartOf="@+id/tv_car_company"
+            app:layout_constraintTop_toBottomOf="@+id/tv_car_model" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView

@@ -3,7 +3,6 @@ package com.example.kuime.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.kuime.CaEngine;
-import com.example.kuime.activity.ActivityLogin;
 import com.example.kuime.CaApplication;
 import com.example.kuime.CaPref;
 import com.example.kuime.CaResult;
@@ -11,8 +10,6 @@ import com.example.kuime.IaResultHandler;
 import com.example.kuime.R;
 import com.example.kuime.model.CaStation;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,7 +23,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 import static com.example.kuime.CaApplication.m_Context;
@@ -46,6 +42,13 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
     protected  void onResume() {
 
         super.onResume();
+
+    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home);
+
         m_Context = getApplicationContext();
         m_Pref = new CaPref(m_Context);
         now = System.currentTimeMillis();
@@ -56,6 +59,7 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
             long calNow = now-CaApplication.m_Info.dtStart.getTime();
             CaApplication.m_Info.dReserveTimeRatio = calNow / (double) calDate;
             Log.d("HOME", "ReserveTimeRatio is " + CaApplication.m_Info.dReserveTimeRatio);
+            CaApplication.m_Info.dtStart = mNow; //시작시간을 현재시간으로 바꿔주어서 나중에 다시 이 화면에 들어오게 되었을 때 RTRatio 가 현실 반영하게끔 바꿔줌
         }
 
         //m_Pref.setValue(PREF_CURRENT_CAP, 45);
@@ -69,7 +73,7 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
 
         tvName = findViewById(R.id.tv_name);
         tvStation = findViewById(R.id.tv_station);
-        tvCar = findViewById(R.id.tv_car_model);
+        tvCar = findViewById(R.id.tv_car_company);
         tvReserveType = findViewById(R.id.tv_reserve_type);
         tvMargin = findViewById(R.id.tv_margin);
         tvCurrentCap = findViewById(R.id.tv_current_capacity);
@@ -110,7 +114,7 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
 
             if(CaApplication.m_Info.dReserveTimeRatio <=1){ //1 이상이면 아직 충전 시작 시간이 되지 않았다는 것
                 nCurrentCap = (int)Math.round((100-nCurrentCap)*CaApplication.m_Info.dReserveTimeRatio + nCurrentCap);
-                //m_Pref.setValue(PREF_CURRENT_CAP, nCurrentCap);
+                m_Pref.setValue(PREF_CURRENT_CAP, nCurrentCap);
             }
 
             tvCurrentCap.setText(Integer.toString(nCurrentCap)+ "%");
@@ -130,16 +134,6 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
                 ivBattery.setImageDrawable(getDrawable(R.drawable.battery5));
             }
         }
-
-
-
-    }
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-
-
 
     }
 
