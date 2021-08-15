@@ -10,10 +10,14 @@ import com.example.kuime.IaResultHandler;
 import com.example.kuime.R;
 import com.example.kuime.model.CaStation;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +37,7 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
     CaPref m_Pref;
     TextView tvName, tvStation, tvCar, tvReserveType, tvMargin, tvCurrentCap, tvEmpty;
     ImageView ivBattery, ivNext;
+    Button btnMap;
 
     long now;
     Date mNow;
@@ -46,6 +51,8 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
         m_Pref = new CaPref(m_Context);
         now = System.currentTimeMillis();
         mNow = new Date(now);
+
+        CaApplication.m_Engine.GetHomeInfo(CaApplication.m_Info.strId, this,this);
 
         if(CaApplication.m_Info.dtStart != null && CaApplication.m_Info.dtEnd != null){
             long calDate = CaApplication.m_Info.dtEnd.getTime() - CaApplication.m_Info.dtStart.getTime();
@@ -75,22 +82,34 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
         tvName.setText(CaApplication.m_Info.strName +"님, 환영합니다");
         tvStation.setText(CaApplication.m_Info.strStationName);
         tvCar.setText(CaApplication.m_Info.strCarModel);
+        //btnMap.findViewById(R.id.btn_map);
+
         //tvMargin
         if(CaApplication.m_Info.bPaid == 1 || CaApplication.m_Info.bPaid == -1){ //이용중인 서비스가 없을 때
-            tvName.setVisibility(View.INVISIBLE);
+            Log.i("Home", "이용 중인 서비스가 없습니다");
+
             tvStation.setVisibility(View.INVISIBLE);
             tvCar.setVisibility(View.INVISIBLE);
             tvReserveType.setVisibility(View.INVISIBLE);
-            tvMargin.setVisibility(View.INVISIBLE);
+
             tvCurrentCap.setVisibility(View.INVISIBLE);
             ivNext.setVisibility(View.INVISIBLE);
             ivBattery.setVisibility(View.INVISIBLE);
 
             tvEmpty.setVisibility(View.VISIBLE);
+            //btnMap.setEnabled(false);
 
         }
         else{
             tvEmpty.setVisibility(View.INVISIBLE);
+            tvStation.setVisibility(View.VISIBLE);
+            tvCar.setVisibility(View.VISIBLE);
+            tvReserveType.setVisibility(View.VISIBLE);
+
+            tvCurrentCap.setVisibility(View.VISIBLE);
+            ivNext.setVisibility(View.VISIBLE);
+            ivBattery.setVisibility(View.VISIBLE);
+
             if(CaApplication.m_Info.dtEnd.before(mNow)){
                 tvReserveType.setText("서비스가 완료되었어요!");
             }
@@ -105,8 +124,15 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
             }
 
             if(CaApplication.m_Info.dReserveTimeRatio <=1){ //1 이상이면 아직 충전 시작 시간이 되지 않았다는 것
-                nCurrentCap = (int)Math.round((100-nCurrentCap)*CaApplication.m_Info.dReserveTimeRatio + nCurrentCap);
-                CaApplication.m_Info.nCurrentCap = nCurrentCap;
+                if(CaApplication.m_Info.nReserveType !=2){
+                    nCurrentCap = (int)Math.round((100-nCurrentCap)*CaApplication.m_Info.dReserveTimeRatio + nCurrentCap);
+                    CaApplication.m_Info.nCurrentCap = nCurrentCap;
+                }
+                else{ //방전일 경우
+                    nCurrentCap = (int)Math.round(nCurrentCap- (nCurrentCap- CaApplication.m_Info.nMinCapacity)*CaApplication.m_Info.dReserveTimeRatio);
+                    CaApplication.m_Info.nCurrentCap = nCurrentCap;
+                }
+
                 //m_Pref.setValue(PREF_CURRENT_CAP, nCurrentCap);
             }
 
@@ -225,7 +251,20 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_map: {
+                if(CaApplication.m_Info.bPaid == 1 || CaApplication.m_Info.bPaid == -1){
                     CaApplication.m_Engine.GetStationInfo(this,this);
+                }
+                else{
+                    AlertDialog.Builder dlg = new AlertDialog.Builder(ActivityHome.this);
+                    dlg.setMessage("충전이 진행중입니다.");
+                    dlg.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+                    dlg.show();
+
+                }
+                    //CaApplication.m_Engine.GetStationInfo(this,this);
 
             }
             break;
@@ -252,6 +291,12 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
 
                 }
 
+            }
+            break;
+
+            case R.id.cl_fee: {
+                Intent it = new Intent(this, ActivityFee.class);
+                startActivity(it);
             }
             break;
 
@@ -317,6 +362,33 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
 
                     Intent it = new Intent(this, ActivityCharge.class);
                     startActivity(it);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            break;
+
+            case CaEngine.GET_HOME_INFO: {
+
+                try {
+                    Log.i("LOGIN", "GetHomeInfo Called...");
+                    JSONObject jo = Result.object;
+                    CaApplication.m_Info.strName = jo.getString("name");
+                    CaApplication.m_Info.strCarModel = jo.getString("car_model_name");
+                    if(!jo.getString("efficiency").equals("정보없음")){
+                        CaApplication.m_Info.dEfficiency = jo.getDouble("efficiency");
+                    }
+                    CaApplication.m_Info.dBatteryCapacity = jo.getDouble("battery_capacity");
+                    CaApplication.m_Info.bPaid = jo.getInt("is_paid");
+
+                    if(CaApplication.m_Info.bPaid != -1){
+                        CaApplication.m_Info.nServiceReservation = jo.getString("service_reservation_id");
+                        CaApplication.m_Info.dtStart = CaApplication.m_Info.parseDate(jo.getString("start_time"));
+                        CaApplication.m_Info.dtEnd = CaApplication.m_Info.parseDate(jo.getString("finish_time"));
+                        CaApplication.m_Info.strStationName = jo.getString("station_name");
+                    }
+
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

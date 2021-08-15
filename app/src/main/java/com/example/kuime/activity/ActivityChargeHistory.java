@@ -3,6 +3,7 @@ package com.example.kuime.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -73,10 +74,12 @@ public class ActivityChargeHistory extends AppCompatActivity implements IaResult
 
     private class ChargeHistoryAdapter extends BaseAdapter {
 
-
+        Typeface tf;
 
         public ChargeHistoryAdapter() {
             super();
+
+
         }
 
         @Override
@@ -118,16 +121,20 @@ public class ActivityChargeHistory extends AppCompatActivity implements IaResult
             }
 
             final CaHistory history= alHistory.get(position);
+            tf = Typeface.createFromAsset(getAssets(), "fonts/nanumsquareroundr.ttf");
+            holder.tvChargeDate.setTypeface(tf);
+            holder.tvEarningFee.setTypeface(tf);
+            holder.tvChargeType.setTypeface(tf);
 
             holder.tvChargeDate.setText(mMonthDay.format(history.dtReserve));
             if(history.nReserveType == 1){
-                holder.tvChargeType.setText("타입: 충전");
+                holder.tvChargeType.setText("충전");
             }
             else if(history.nReserveType == 2){
-                holder.tvChargeType.setText("타입: 방전");
+                holder.tvChargeType.setText("방전");
             }
             else if(history.nReserveType == 3){
-                holder.tvChargeType.setText("타입: 충/방전");
+                holder.tvChargeType.setText("충/방전");
             }
             holder.tvEarningFee.setText(history.nFee +"원");
 
@@ -213,7 +220,7 @@ public class ActivityChargeHistory extends AppCompatActivity implements IaResult
 
                 try {
                     JSONObject jo = Result.object;
-                    if(jo.getJSONArray("list_history")==null){
+                    if(jo.getJSONArray("list_history").length() == 0){
                         tvEmpty.setVisibility(View.VISIBLE);
                     }
                     else{

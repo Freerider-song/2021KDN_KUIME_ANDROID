@@ -12,7 +12,7 @@
         android:layout_height="30dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="30dp"
-        android:background="@drawable/btn_back_colored"
+        android:background="@drawable/x_icon"
         android:backgroundTint="#00BCD4"
         android:backgroundTintMode="src_in"
         android:onClick="onClick"

@@ -18,8 +18,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Kuime.NoActionBar">
-        <activity android:name=".activity.ActivityChargeResult"></activity>
+        android:theme="@style/Theme.Kuime.NoActionBar"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".activity.ActivityFee"></activity>
+        <activity android:name=".activity.ActivityChargeResult" />
         <activity android:name=".activity.ActivityChargeHistory" />
         <activity android:name=".activity.ActivityCharge" />
         <activity android:name=".activity.ActivityCard" />

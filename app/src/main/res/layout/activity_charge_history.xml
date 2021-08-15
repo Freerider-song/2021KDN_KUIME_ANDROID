@@ -28,7 +28,7 @@
         android:layout_height="30dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="30dp"
-        android:background="@drawable/btn_back_colored"
+        android:background="@drawable/x_icon"
         android:backgroundTint="#00BCD4"
         android:backgroundTintMode="src_in"
         android:onClick="onClick"
@@ -72,12 +72,10 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
-        android:divider="@color/eg_cyan_light"
-        android:dividerHeight="3dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_saving_fee" >
+        app:layout_constraintTop_toBottomOf="@+id/tv_saving_fee">
 
     </ListView>
 

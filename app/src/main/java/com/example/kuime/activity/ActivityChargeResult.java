@@ -5,12 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.kuime.activity.ActivityLogin;
 import com.example.kuime.CaApplication;
 import com.example.kuime.CaEngine;
 import com.example.kuime.CaPref;
@@ -26,7 +26,7 @@ import static com.example.kuime.CaApplication.m_Context;
 public class ActivityChargeResult extends AppCompatActivity implements IaResultHandler {
 
     CaPref m_Pref;
-    TextView tvTitle, tvFeeTitle, tvFee, tvPay;
+    TextView tvTitle, tvFeeTitle, tvFee, tvPay, tvFinalFee;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,8 +40,11 @@ public class ActivityChargeResult extends AppCompatActivity implements IaResultH
 
         tvTitle = findViewById(R.id.tv_final_reserve_type);
         tvFeeTitle = findViewById(R.id.tv_final_fee_title);
-        tvFee = findViewById(R.id.tv_final_fee);
+        tvFee = findViewById(R.id.tv_expected_fee);
+        tvFinalFee = findViewById(R.id.tv_final_fee);
         tvPay = findViewById(R.id.tv_pay);
+
+
 
         if(CaApplication.m_Info.nReserveType == 2){ // 방전이라면
             tvTitle.setText("쿠이미가 똑똑한 \n 방전을 완료했어요");
@@ -49,7 +52,10 @@ public class ActivityChargeResult extends AppCompatActivity implements IaResultH
             tvPay.setText("포인트로 전환됩니다.\n 언제든지 지갑으로 옮길 수 있어요");
         }
 
-        tvFee.setText(CaApplication.m_Info.nExpectedFee + " 원");
+        tvFee.setText(CaApplication.m_Info.m_dfWon.format(CaApplication.m_Info.nExpectedFee) + "원");
+        tvFee.setPaintFlags(tvFee.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
+        tvFinalFee.setText(CaApplication.m_Info.m_dfWon.format(CaApplication.m_Info.nExpectedFee / 0.8) +"원");
+
     }
 
     public void onClick(View v) {
@@ -104,6 +110,8 @@ public class ActivityChargeResult extends AppCompatActivity implements IaResultH
                         dlg.setPositiveButton("확인",new DialogInterface.OnClickListener(){
                             public void onClick(DialogInterface dialog, int which) {
                                 m_Pref.setValue(CaPref.PREF_CURRENT_CAP, 45);
+                                Intent it = new Intent(ActivityChargeResult.this, ActivityHome.class);
+                                startActivity(it);
                             }
                         });
                         dlg.show();

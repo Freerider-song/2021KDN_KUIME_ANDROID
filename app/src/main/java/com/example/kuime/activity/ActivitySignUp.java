@@ -6,6 +6,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -25,6 +27,7 @@ public class ActivitySignUp extends AppCompatActivity implements IaResultHandler
     String strId, strPassword, strPasswordCheck;
     private EditText etId;
     private EditText etPassword, etPasswordCheck;
+    String preText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,7 @@ public class ActivitySignUp extends AppCompatActivity implements IaResultHandler
 
         strPassword = etPassword.getText().toString();
         strPasswordCheck = etPasswordCheck.getText().toString();
+
         if(!strPassword.equals(strPasswordCheck)){
             tvCheck.setVisibility(View.VISIBLE);
         }

@@ -5,7 +5,7 @@
     android:id="@+id/area_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/eg_pastel_blue">
+    android:background="@drawable/shape_squared_corner_shadow">
 
 
     <TextView
@@ -16,7 +16,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="30dp"
         android:text="충전"
-        android:textColor="@color/bright_red"
+        android:textColor="@color/ks_gray"
         android:textSize="26dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tv_charge_date"

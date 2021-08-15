@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -91,6 +92,10 @@ public class ActivityReserveCharger extends AppCompatActivity {
             final CaCharger charger= alCharger.get(position);
 
             Log.i("ReserveCharger", "리스트 충전기 이름" + charger.strChargerName + " 포지션 : " + position);
+            Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/nanumsquareroundr.ttf");
+            holder.tvChargerUsed.setTypeface(tf);
+            holder.tvChargerName.setTypeface(tf);
+
             holder.tvChargerName.setText(charger.strChargerName);
             if(charger.bUsed){
                 holder.tvChargerUsed.setVisibility(View.VISIBLE);
@@ -125,14 +130,14 @@ public class ActivityReserveCharger extends AppCompatActivity {
             alCharger.add(charger);
         }
 
-        for(int i=CaApplication.m_Info.nV2gCharger; i<CaApplication.m_Info.nFastCharger+CaApplication.m_Info.nFastCharger; i++){
+        for(int i=CaApplication.m_Info.nV2gCharger; i<CaApplication.m_Info.nV2gCharger+CaApplication.m_Info.nFastCharger; i++){
             CaCharger charger = new CaCharger();
             charger.strChargerName = Integer.toString(i+1)+"충전기 (급속)";
             charger.bUsed = random.nextBoolean();
             Log.i("ReserveCharger", " 충전기 이름: "+ charger.strChargerName +" bused : " + charger.bUsed);
             alCharger.add(charger);
         }
-        for(int i=CaApplication.m_Info.nFastCharger; i<CaApplication.m_Info.nV2gCharger+CaApplication.m_Info.nFastCharger+CaApplication.m_Info.nSlowCharger; i++){
+        for(int i=CaApplication.m_Info.nFastCharger+CaApplication.m_Info.nV2gCharger; i<nCount; i++){
             CaCharger charger = new CaCharger();
             charger.strChargerName = Integer.toString(i+1)+"충전기 (완속)";
             charger.bUsed = random.nextBoolean();

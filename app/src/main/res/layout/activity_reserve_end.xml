@@ -53,7 +53,7 @@
         android:layout_marginTop="10dp"
         android:gravity="center_horizontal"
         android:lineSpacingExtra="8sp"
-        android:text="최대요금"
+        android:text="예상 요금"
         android:textColor="@color/ks_gray"
         android:textSize="26dp"
         app:layout_constraintStart_toStartOf="@+id/tv_reserve_title"

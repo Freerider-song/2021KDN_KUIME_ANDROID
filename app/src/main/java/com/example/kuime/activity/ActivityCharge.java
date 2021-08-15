@@ -126,7 +126,7 @@ public class ActivityCharge extends AppCompatActivity implements IaResultHandler
         markerOptions.title(CaApplication.m_Info.strStationName);
         markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
         mMap.addMarker(markerOptions);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Station, 18));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Station, 16));
 
     }
 

@@ -13,6 +13,7 @@ import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -96,8 +97,8 @@ public class CaHttpPost extends CaHttp {
 
             URL url=new URL(m_strUri+"?"+strOutput);
 
-            HttpsURLConnection conn=(HttpsURLConnection)url.openConnection();
-
+            //HttpsURLConnection conn=(HttpsURLConnection)url.openConnection();
+            HttpURLConnection conn=(HttpURLConnection)url.openConnection();
             Log.i("CaHttpPost ", "conn="+conn.toString());
 
             conn.setReadTimeout(15000);
@@ -185,8 +186,8 @@ public class CaHttpPost extends CaHttp {
 
             URL url=new URL(m_strUri+ask);
 
-            HttpsURLConnection conn=(HttpsURLConnection)url.openConnection();
-
+            //HttpsURLConnection conn=(HttpsURLConnection)url.openConnection();
+            HttpURLConnection conn=(HttpURLConnection)url.openConnection();
             Log.i("CaHttpPost ", "conn="+conn.toString());
 
             conn.setUseCaches(false);

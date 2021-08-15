@@ -65,6 +65,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static com.example.kuime.CaApplication.m_Context;
+import static com.example.kuime.R.drawable.v2g_marker;
 
 public class ActivityMap extends AppCompatActivity implements IaResultHandler, OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback {
 
@@ -119,15 +120,19 @@ public class ActivityMap extends AppCompatActivity implements IaResultHandler, O
         int height = 150;
         int width = 150;
         BitmapDrawable bitmapdraw=(BitmapDrawable)getResources().getDrawable(R.drawable.electricity_marker);
+        BitmapDrawable bitmapdraw2 = (BitmapDrawable)getResources().getDrawable(v2g_marker);
         Bitmap b=bitmapdraw.getBitmap();
+        Bitmap b2=bitmapdraw2.getBitmap();
         Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+        Bitmap v2gMarker = Bitmap.createScaledBitmap(b2, width, height, false);
+
 
         MarkerOptions markerOptions = new MarkerOptions();
         LatLng JEJU = new LatLng(33.505, 126.4681157);
         markerOptions.position(JEJU);
         markerOptions.title("제주 애월 1 충전소");
         markerOptions.snippet("기본 위치");
-        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(v2gMarker));
         mMap.addMarker(markerOptions);
 
         Log.i("MAP", "마커설정시 alStation 길이 " + alStation.size());
@@ -138,9 +143,15 @@ public class ActivityMap extends AppCompatActivity implements IaResultHandler, O
                     .position(new LatLng(station.dx, station.dy))
                     .title(station.strStationName)
                     .snippet("급속 "+station.nFastCharger + " 완속 " + station.nSlowCharger + " V2G " + station.nV2gCharger);
+            if(station.nV2gCharger>0){
+                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+            }
+            else{
+                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(v2gMarker));
+            }
             mMap.addMarker(markerOptions);
         }
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(JEJU, 18));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(JEJU, 16));
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override

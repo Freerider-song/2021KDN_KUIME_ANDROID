@@ -15,7 +15,7 @@ import org.json.JSONObject;
 
 public class CaTask extends AsyncTask<CaArg, Void, CaResult> {
 
-    private static final String m_strUrlApi  = "https://electric-car-project.herokuapp.com/";
+    private static final String m_strUrlApi  = "http://118.67.135.33:5000/";
 
     private IaResultHandler m_ResultHandler;
     private Context m_Context;

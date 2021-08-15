@@ -16,25 +16,28 @@
         android:text="최종 요금"
         android:textColor="@color/ks_gray"
         android:textSize="26dp"
-        app:layout_constraintStart_toStartOf="@+id/tv_final_fee"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.41"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView5" />
 
     <TextView
         android:id="@+id/tv_pay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginBottom="40dp"
         android:gravity="center_horizontal"
         android:lineSpacingExtra="8sp"
         android:text="결제를 진행해주세요."
         android:textColor="@color/ks_gray"
         android:textSize="26dp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_next"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_final_fee" />
+        app:layout_constraintHorizontal_bias="0.559"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/tv_final_fee"
+        android:id="@+id/tv_expected_fee"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -42,11 +45,22 @@
         android:lineSpacingExtra="8sp"
         android:text="25,970 원"
         android:textColor="@color/foreground1"
-        android:textSize="40dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="36dp"
+        app:layout_constraintStart_toStartOf="@+id/tv_final_fee_title"
         app:layout_constraintTop_toBottomOf="@+id/tv_final_fee_title" />
+
+    <TextView
+        android:id="@+id/tv_final_fee"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:lineSpacingExtra="8sp"
+        android:text="25,970 원"
+        android:textColor="@color/main_orange"
+        android:textSize="40dp"
+        app:layout_constraintStart_toStartOf="@+id/tv_final_fee_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_expected_fee" />
 
     <TextView
         android:id="@+id/tv_final_reserve_type"
@@ -70,7 +84,7 @@
         android:layout_height="30dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="30dp"
-        android:background="@drawable/btn_back_colored"
+        android:background="@drawable/x_icon"
         android:backgroundTint="#00BCD4"
         android:backgroundTintMode="src_in"
         android:onClick="onClick"
