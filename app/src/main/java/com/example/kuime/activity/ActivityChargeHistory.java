@@ -45,7 +45,7 @@ public class ActivityChargeHistory extends AppCompatActivity implements IaResult
 
     String strYearMonth;
 
-    TextView tvEmpty;
+    TextView tvEmpty, tvSavingFee;
     ListView listView;
 
     ArrayList<CaHistory> alHistory = new ArrayList<>();
@@ -134,7 +134,7 @@ public class ActivityChargeHistory extends AppCompatActivity implements IaResult
                 holder.tvChargeType.setText("방전");
             }
             else if(history.nReserveType == 3){
-                holder.tvChargeType.setText("충/방전");
+                holder.tvChargeType.setText("충·방전");
             }
             holder.tvEarningFee.setText(history.nFee +"원");
 
@@ -150,7 +150,10 @@ public class ActivityChargeHistory extends AppCompatActivity implements IaResult
         getChargeHistory();
 
         tvEmpty = findViewById(R.id.tv_empty);
+        tvSavingFee = findViewById(R.id.tv_saving_fee);
         listView = findViewById(R.id.lv_charge_history);
+
+        tvSavingFee.setText("+"+CaApplication.m_Info.m_dfWon.format(alHistory.size() * 4562) + "원을\n아꼈어요!");
 
         m_ChargeHistoryAdapter= new ChargeHistoryAdapter();
 
@@ -245,6 +248,8 @@ public class ActivityChargeHistory extends AppCompatActivity implements IaResult
 
                         }
                         Log.i("ChargeHistory" , "alHistory size" + alHistory.size());
+
+                        tvSavingFee.setText("+"+CaApplication.m_Info.m_dfWon.format(alHistory.size() * 4562) + "원을\n아꼈어요!");
                         m_ChargeHistoryAdapter.notifyDataSetChanged();
                     }
 

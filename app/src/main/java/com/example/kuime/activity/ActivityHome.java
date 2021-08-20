@@ -8,6 +8,7 @@ import com.example.kuime.CaPref;
 import com.example.kuime.CaResult;
 import com.example.kuime.IaResultHandler;
 import com.example.kuime.R;
+import com.example.kuime.model.CaHistory;
 import com.example.kuime.model.CaStation;
 
 import android.app.AlertDialog;
@@ -27,6 +28,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import static com.example.kuime.CaApplication.m_Context;
@@ -43,31 +46,41 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
     Date mNow;
     SimpleDateFormat mFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
-    @Override
-    protected  void onResume() {
+    ArrayList<CaHistory> alHistory = new ArrayList<>();
 
-        super.onResume();
+    int nCurrentCap;
+
+    SimpleDateFormat mYearMonth = new SimpleDateFormat("yyyy-MM");
+    SimpleDateFormat mMonthDay = new SimpleDateFormat("MM-dd");
+
+    String strYearMonth;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home);
+
         m_Context = getApplicationContext();
         m_Pref = new CaPref(m_Context);
         now = System.currentTimeMillis();
         mNow = new Date(now);
 
-        CaApplication.m_Engine.GetHomeInfo(CaApplication.m_Info.strId, this,this);
-
         if(CaApplication.m_Info.dtStart != null && CaApplication.m_Info.dtEnd != null){
             long calDate = CaApplication.m_Info.dtEnd.getTime() - CaApplication.m_Info.dtStart.getTime();
             long calNow = now-CaApplication.m_Info.dtStart.getTime();
-            CaApplication.m_Info.dReserveTimeRatio = calNow / (double) calDate;
-            Log.d("HOME", "ReserveTimeRatio is " + CaApplication.m_Info.dReserveTimeRatio);
-            CaApplication.m_Info.dtStart = mNow; //시작시간을 현재시간으로 바꿔주어서 나중에 다시 이 화면에 들어오게 되었을 때 RTRatio 가 현실 반영하게끔 바꿔줌
+            if(calNow>=0){
+                CaApplication.m_Info.dReserveTimeRatio = calNow / (double) calDate;
+                Log.d("HOME", "ReserveTimeRatio is " + CaApplication.m_Info.dReserveTimeRatio);
+                if(mNow.before(CaApplication.m_Info.dtEnd)){
+                    CaApplication.m_Info.dtStart = mNow; //시작시간을 현재시간으로 바꿔주어서 나중에 다시 이 화면에 들어오게 되었을 때 RTRatio 가 현실 반영하게끔 바꿔줌
+                }
+
+            }
+
         }
-        //m_Pref.setValue(PREF_CURRENT_CAP, 45);
-        //int nCurrentCap = m_Pref.getValue(PREF_CURRENT_CAP, 45);
-        int nCurrentCap = CaApplication.m_Info.nCurrentCap; //nCurrentCap = 45
-        if(nCurrentCap ==0){
-            m_Pref.setValue(PREF_CURRENT_CAP, 45);
-            nCurrentCap = m_Pref.getValue(PREF_CURRENT_CAP, 45);
-        }
+
+        nCurrentCap = CaApplication.m_Info.nCurrentCap; //nCurrentCap = 45
         Log.i("HOME", "current cap is " +nCurrentCap);
 
         tvName = findViewById(R.id.tv_name);
@@ -84,6 +97,25 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
         tvCar.setText(CaApplication.m_Info.strCarModel);
         //btnMap.findViewById(R.id.btn_map);
 
+    }
+
+    @Override
+    protected  void onResume() {
+
+        super.onResume();
+
+        CaApplication.m_Engine.GetHomeInfo(CaApplication.m_Info.strId, this,this);
+        CaApplication.m_Engine.GetChargeHistory(CaApplication.m_Info.strId, this,this);
+
+    }
+
+
+    public void viewSetting(){
+
+        now = System.currentTimeMillis();
+        mNow = new Date(now);
+
+        Log.i("HOME", "bPaid is " + CaApplication.m_Info.bPaid);
         //tvMargin
         if(CaApplication.m_Info.bPaid == 1 || CaApplication.m_Info.bPaid == -1){ //이용중인 서비스가 없을 때
             Log.i("Home", "이용 중인 서비스가 없습니다");
@@ -91,13 +123,12 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
             tvStation.setVisibility(View.INVISIBLE);
             tvCar.setVisibility(View.INVISIBLE);
             tvReserveType.setVisibility(View.INVISIBLE);
-
             tvCurrentCap.setVisibility(View.INVISIBLE);
             ivNext.setVisibility(View.INVISIBLE);
             ivBattery.setVisibility(View.INVISIBLE);
 
             tvEmpty.setVisibility(View.VISIBLE);
-            //btnMap.setEnabled(false);
+
 
         }
         else{
@@ -105,7 +136,6 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
             tvStation.setVisibility(View.VISIBLE);
             tvCar.setVisibility(View.VISIBLE);
             tvReserveType.setVisibility(View.VISIBLE);
-
             tvCurrentCap.setVisibility(View.VISIBLE);
             ivNext.setVisibility(View.VISIBLE);
             ivBattery.setVisibility(View.VISIBLE);
@@ -119,19 +149,21 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
             else if(CaApplication.m_Info.nReserveType == 2){
                 tvReserveType.setText("스마트한 방전 중이에요!");
             }
-            else{
+            else if(CaApplication.m_Info.nReserveType == 1){
                 tvReserveType.setText("스마트한 충전 중이에요!");
+            }
+            else if(CaApplication.m_Info.nReserveType == 3){
+                tvReserveType.setText("스마트한 충·방전 중이에요!");
             }
 
             if(CaApplication.m_Info.dReserveTimeRatio <=1){ //1 이상이면 아직 충전 시작 시간이 되지 않았다는 것
                 if(CaApplication.m_Info.nReserveType !=2){
                     nCurrentCap = (int)Math.round((100-nCurrentCap)*CaApplication.m_Info.dReserveTimeRatio + nCurrentCap);
-                    CaApplication.m_Info.nCurrentCap = nCurrentCap;
                 }
                 else{ //방전일 경우
                     nCurrentCap = (int)Math.round(nCurrentCap- (nCurrentCap- CaApplication.m_Info.nMinCapacity)*CaApplication.m_Info.dReserveTimeRatio);
-                    CaApplication.m_Info.nCurrentCap = nCurrentCap;
                 }
+                CaApplication.m_Info.nCurrentCap = nCurrentCap;
 
                 //m_Pref.setValue(PREF_CURRENT_CAP, nCurrentCap);
             }
@@ -153,98 +185,6 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
                 ivBattery.setImageDrawable(getDrawable(R.drawable.battery5));
             }
         }
-
-    }
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-
-        m_Context = getApplicationContext();
-        m_Pref = new CaPref(m_Context);
-        now = System.currentTimeMillis();
-        mNow = new Date(now);
-/*
-        if(CaApplication.m_Info.dtStart != null && CaApplication.m_Info.dtEnd != null){
-            long calDate = CaApplication.m_Info.dtEnd.getTime() - CaApplication.m_Info.dtStart.getTime();
-            long calNow = now-CaApplication.m_Info.dtStart.getTime();
-            CaApplication.m_Info.dReserveTimeRatio = calNow / (double) calDate;
-            Log.d("HOME", "ReserveTimeRatio is " + CaApplication.m_Info.dReserveTimeRatio);
-            CaApplication.m_Info.dtStart = mNow; //시작시간을 현재시간으로 바꿔주어서 나중에 다시 이 화면에 들어오게 되었을 때 RTRatio 가 현실 반영하게끔 바꿔줌
-        }
-
-        //m_Pref.setValue(PREF_CURRENT_CAP, 45);
-        int nCurrentCap = m_Pref.getValue(PREF_CURRENT_CAP, 45);
-        if(nCurrentCap ==0){
-            m_Pref.setValue(PREF_CURRENT_CAP, 45);
-            nCurrentCap = m_Pref.getValue(PREF_CURRENT_CAP, 45);
-        }
-        Log.i("HOME", "current cap is " +nCurrentCap);
-
-
-        tvName = findViewById(R.id.tv_name);
-        tvStation = findViewById(R.id.tv_station);
-        tvCar = findViewById(R.id.tv_car_company);
-        tvReserveType = findViewById(R.id.tv_reserve_type);
-        tvMargin = findViewById(R.id.tv_margin);
-        tvCurrentCap = findViewById(R.id.tv_current_capacity);
-        tvEmpty = findViewById(R.id.tv_empty);
-        ivNext = findViewById(R.id.iv_next);
-        ivBattery = findViewById(R.id.iv_battery);
-        tvName.setText(CaApplication.m_Info.strName +"님, 환영합니다");
-        tvStation.setText(CaApplication.m_Info.strStationName);
-        tvCar.setText(CaApplication.m_Info.strCarModel);
-        //tvMargin
-        if(CaApplication.m_Info.bPaid == 1 || CaApplication.m_Info.bPaid == -1){ //이용중인 서비스가 없을 때
-            tvName.setVisibility(View.INVISIBLE);
-            tvStation.setVisibility(View.INVISIBLE);
-            tvCar.setVisibility(View.INVISIBLE);
-            tvReserveType.setVisibility(View.INVISIBLE);
-            tvMargin.setVisibility(View.INVISIBLE);
-            tvCurrentCap.setVisibility(View.INVISIBLE);
-            ivNext.setVisibility(View.INVISIBLE);
-            ivBattery.setVisibility(View.INVISIBLE);
-
-            tvEmpty.setVisibility(View.VISIBLE);
-
-        }
-        else{
-            tvEmpty.setVisibility(View.INVISIBLE);
-            if(CaApplication.m_Info.dtEnd.before(mNow)){
-                tvReserveType.setText("서비스가 완료되었어요!");
-            }
-            else if(mNow.before(CaApplication.m_Info.dtStart)){
-                tvReserveType.setText("서비스 이용 대기중이에요");
-            }
-            else if(CaApplication.m_Info.nReserveType == 2){
-                tvReserveType.setText("스마트한 방전 중이에요!");
-            }
-            else{
-                tvReserveType.setText("스마트한 충전 중이에요!");
-            }
-
-            if(CaApplication.m_Info.dReserveTimeRatio <=1){ //1 이상이면 아직 충전 시작 시간이 되지 않았다는 것
-                nCurrentCap = (int)Math.round((100-nCurrentCap)*CaApplication.m_Info.dReserveTimeRatio + nCurrentCap);
-                m_Pref.setValue(PREF_CURRENT_CAP, nCurrentCap);
-            }
-
-            tvCurrentCap.setText(Integer.toString(nCurrentCap)+ "%");
-            if(nCurrentCap <20) {
-                ivBattery.setImageDrawable(getDrawable(R.drawable.battery1));
-            }
-            else if(nCurrentCap <40) {
-                ivBattery.setImageDrawable(getDrawable(R.drawable.battery2));
-            }
-            else if(nCurrentCap <60) {
-                ivBattery.setImageDrawable(getDrawable(R.drawable.battery3));
-            }
-            else if(nCurrentCap <90) {
-                ivBattery.setImageDrawable(getDrawable(R.drawable.battery4));
-            }
-            else if(nCurrentCap <=100) {
-                ivBattery.setImageDrawable(getDrawable(R.drawable.battery5));
-            }
-        }*/
 
     }
 
@@ -386,8 +326,59 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
                         CaApplication.m_Info.dtStart = CaApplication.m_Info.parseDate(jo.getString("start_time"));
                         CaApplication.m_Info.dtEnd = CaApplication.m_Info.parseDate(jo.getString("finish_time"));
                         CaApplication.m_Info.strStationName = jo.getString("station_name");
+                        CaApplication.m_Info.nReserveType = jo.getInt("reserve_type");
+                        if (jo.isNull("minimum_capacity")) {
+                            //Usage.m_dUsage=0.0;
+                            CaApplication.m_Info.nMinCapacity = 0;
+                        } else {
+                            CaApplication.m_Info.nMinCapacity = jo.getInt("minimum_capacity");
+                        }
                     }
 
+                    viewSetting();
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            break;
+
+            case CaEngine.GET_CHARGE_HISTORY: {
+
+                try {
+                    JSONObject jo = Result.object;
+                    if(jo.getJSONArray("list_history").length() == 0){
+                    }
+                    else{
+                        JSONArray ja = jo.getJSONArray("list_history");
+
+                        alHistory.clear();
+                        Log.i("ChargeHistory" , "ja size" + ja.length());
+
+                        Calendar calToday = Calendar.getInstance();
+
+                        strYearMonth = mYearMonth.format(calToday.getTime());
+
+                        for(int i=0;i<ja.length();i++){
+                            JSONObject joHistory = ja.getJSONObject(i);
+                            CaHistory history = new CaHistory();
+
+                            history.dtReserve = CaApplication.m_Info.parseDate(joHistory.getString("reserve_time"));
+                            history.nReserveType = joHistory.getInt("reserve_type");
+                            history.nFee = joHistory.getInt("expected_fee");
+
+
+                            if(mYearMonth.format(history.dtReserve).equals(strYearMonth)){
+                                alHistory.add(history);
+                            }
+
+
+                        }
+                        Log.i("ChargeHistory" , "alHistory size" + alHistory.size());
+
+                    }
+                    tvMargin.setText(CaApplication.m_Info.m_dfWon.format(alHistory.size() * 4562) +" 원을 벌었어요");
 
                 } catch (JSONException e) {
                     e.printStackTrace();

@@ -167,6 +167,14 @@ public class ActivityLogin extends AppCompatActivity implements IaResultHandler 
                         CaApplication.m_Info.dtStart = CaApplication.m_Info.parseDate(jo.getString("start_time"));
                         CaApplication.m_Info.dtEnd = CaApplication.m_Info.parseDate(jo.getString("finish_time"));
                         CaApplication.m_Info.strStationName = jo.getString("station_name");
+                        CaApplication.m_Info.nReserveType = jo.getInt("reserve_type");
+                        if (jo.isNull("minimum_capacity")) {
+                            //Usage.m_dUsage=0.0;
+                            CaApplication.m_Info.nMinCapacity = 0;
+                        } else {
+                            CaApplication.m_Info.nMinCapacity = jo.getInt("minimum_capacity");
+                        }
+
                     }
                     Intent it = new Intent(this, ActivityHome.class);
                     startActivity(it);

@@ -52,6 +52,10 @@ public class ActivityChargeResult extends AppCompatActivity implements IaResultH
             tvPay.setText("포인트로 전환됩니다.\n 언제든지 지갑으로 옮길 수 있어요");
         }
 
+        else if(CaApplication.m_Info.nReserveType ==3){
+            tvTitle.setText("쿠이미가 똑똑한 \n 충·방전을 완료했어요");
+        }
+
         tvFee.setText(CaApplication.m_Info.m_dfWon.format(CaApplication.m_Info.nExpectedFee) + "원");
         tvFee.setPaintFlags(tvFee.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
         tvFinalFee.setText(CaApplication.m_Info.m_dfWon.format(CaApplication.m_Info.nExpectedFee / 0.8) +"원");
@@ -62,7 +66,8 @@ public class ActivityChargeResult extends AppCompatActivity implements IaResultH
         switch (v.getId()) {
 
             case R.id.btn_back: {
-                finish();
+                Intent it = new Intent(this, ActivityHome.class);
+                startActivity(it);
             }
             break;
 

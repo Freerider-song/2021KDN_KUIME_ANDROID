@@ -55,7 +55,7 @@ public class ActivityCharge extends AppCompatActivity implements IaResultHandler
 
     CaPref m_Pref;
 
-    TextView tvFee, tvStation, tvCompleteUntil, tvEfficiency;
+    TextView tvFee, tvStation, tvCompleteUntil, tvEfficiency, tvChargeTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +83,7 @@ public class ActivityCharge extends AppCompatActivity implements IaResultHandler
         tvStation = findViewById(R.id.tv_station);
         tvCompleteUntil = findViewById(R.id.tv_complete_until);
         tvEfficiency = findViewById(R.id.tv_efficiency);
+        tvChargeTitle = findViewById(R.id.tv_charge_title);
 
         tvFee.setText(CaApplication.m_Info.m_dfWon.format(CaApplication.m_Info.nExpectedFee * CaApplication.m_Info.dReserveTimeRatio)+ "원");
         tvStation.setText(CaApplication.m_Info.strStationName + " / " + CaApplication.m_Info.strChargerName);
@@ -103,6 +104,17 @@ public class ActivityCharge extends AppCompatActivity implements IaResultHandler
         else{
             tvEfficiency.setVisibility(View.INVISIBLE);
         }
+
+        if(CaApplication.m_Info.nReserveType == 1){
+            tvChargeTitle.setText("충전 상황");
+        }
+        else if(CaApplication.m_Info.nReserveType ==2){
+            tvChargeTitle.setText("방전 상황");
+        }
+        else if(CaApplication.m_Info.nReserveType ==3){
+            tvChargeTitle.setText("충·방전 상황");
+       }
+
 
     }
 

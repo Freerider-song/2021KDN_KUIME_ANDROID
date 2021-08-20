@@ -35,6 +35,8 @@ public class ActivityReserveCharger extends AppCompatActivity {
 
     ArrayList<CaCharger> alCharger = new ArrayList<>();
 
+    TextView tvStation;
+
 
     private class ChargerViewHolder {
         public TextView tvChargerName;
@@ -117,6 +119,8 @@ public class ActivityReserveCharger extends AppCompatActivity {
         int nCount = CaApplication.m_Info.nFastCharger + CaApplication.m_Info.nV2gCharger + CaApplication.m_Info.nSlowCharger;
         Log.i("ReserveCharger", "총 충전기 갯수는 " + nCount);
 
+        tvStation =findViewById(R.id.tv_station);
+        tvStation.setText(CaApplication.m_Info.strStationName);
 
         Random random = new Random();
 
@@ -162,9 +166,12 @@ public class ActivityReserveCharger extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final CaCharger charger= alCharger.get(position);
-                Intent intent = new Intent(ActivityReserveCharger.this, ActivityReserveConnect.class);
-                CaApplication.m_Info.strChargerName = charger.strChargerName;
-                startActivity(intent);
+                if(!charger.bUsed){
+                    Intent intent = new Intent(ActivityReserveCharger.this, ActivityReserveConnect.class);
+                    CaApplication.m_Info.strChargerName = charger.strChargerName;
+                    startActivity(intent);
+                }
+
             }
         });
     }

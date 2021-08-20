@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -37,6 +38,7 @@ public class ActivityReserveMin extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String str = (String) spinner.getSelectedItem();
                 CaApplication.m_Info.nMinCapacity = Integer.parseInt(str.substring(0, str.length()-1));
+                Log.i("RESERVEMIN" , "min capacity is " + CaApplication.m_Info.nMinCapacity);
                 tvMinKm.setText("주행가능거리: " + String.format("%.0f", CaApplication.m_Info.dBatteryCapacity
                         * (double)CaApplication.m_Info.nMinCapacity
                         / 100 * CaApplication.m_Info.dEfficiency)+ "km");

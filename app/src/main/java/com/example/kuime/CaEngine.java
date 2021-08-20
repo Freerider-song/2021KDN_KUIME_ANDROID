@@ -23,9 +23,7 @@ public class CaEngine {
     public static final int GET_CHARGE_RESULT = 1010;
     public static final int SET_RESERVE_INFO = 1011;
     public static final int SET_SERVICE_PAID = 1012;
-
-
-
+    public static final int GET_FEE_INFO = 1013;
 
 
     public static final int AUTH_TYPE_UNKNOWN = 1000;
@@ -195,6 +193,14 @@ public class CaEngine {
         Arg.addArg("Service_reservation_id", ServiceReservationId);
 
         executeCommand(Arg, SET_SERVICE_PAID, false, true, Ctx, ResultHandler);
+    }
+
+    public void GetFeeInfo(Context Ctx, IaResultHandler ResultHandler){
+        Log.i("ENGINE", "GetFeeInfo called");
+
+        CaArg Arg = new CaArg("GetFeeInfo", NO_CMD_ARGS, null);
+
+        executeCommand(Arg, GET_FEE_INFO, false, true, Ctx, ResultHandler);
     }
 
 

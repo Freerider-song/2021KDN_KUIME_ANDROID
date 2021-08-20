@@ -26,9 +26,13 @@ public class ActivityReserveEnd extends AppCompatActivity {
 
         tvFee.setText(CaApplication.m_Info.nExpectedFee + " 원");
         if(CaApplication.m_Info.nReserveType == 2){
-            tvFeeTitle.setText("최소 금액");
-            tvTitle.setText("쿠이미가 똑똑한 방전을 시작합니다");
+            tvFeeTitle.setText("최소 예상 금액");
+            tvTitle.setText("쿠이미가 똑똑한 \n방전을 시작합니다");
         }
+        else if(CaApplication.m_Info.nReserveType == 3){
+            tvTitle.setText("쿠이미가 똑똑한 \n충·방전을 시작합니다");
+        }
+
     }
 
     public void onClick(View v) {

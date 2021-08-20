@@ -230,10 +230,10 @@ public class ActivityMap extends AppCompatActivity implements IaResultHandler, O
         markerOptions.position(latLng);
         markerOptions.title(addressText);
 
-        mMap.clear();
+        //mMap.clear();
         mMap.addMarker(markerOptions);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(20));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
     }
 
     @Override

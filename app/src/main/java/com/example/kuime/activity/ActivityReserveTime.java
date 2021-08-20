@@ -107,6 +107,20 @@ public class ActivityReserveTime extends AppCompatActivity implements IaResultHa
 
     }
 
+    public void refresh(){
+        try {
+            //TODO 액티비티 화면 재갱신 시키는 코드
+            Intent intent = getIntent();
+            finish(); //현재 액티비티 종료 실시
+            overridePendingTransition(0, 0); //인텐트 애니메이션 없애기
+            startActivity(intent); //현재 액티비티 재실행 실시
+            overridePendingTransition(0, 0); //인텐트 애니메이션 없애기
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_back: {
@@ -139,6 +153,7 @@ public class ActivityReserveTime extends AppCompatActivity implements IaResultHa
 
                     }
                 };
+
             }
             break;
 
@@ -166,6 +181,7 @@ public class ActivityReserveTime extends AppCompatActivity implements IaResultHa
                         }
                     }
                 };
+
             }
             break;
 
@@ -193,10 +209,12 @@ public class ActivityReserveTime extends AppCompatActivity implements IaResultHa
 
                     }
                 };
+
             }
             break;
 
             case R.id.tv_time_picker2: {
+
                 TimePickerDialog dialog = new TimePickerDialog(this, callbackMethod4,  hour, minute, false);
 
                 dialog.show();
@@ -219,6 +237,7 @@ public class ActivityReserveTime extends AppCompatActivity implements IaResultHa
                         }
                     }
                 };
+
             }
             break;
 

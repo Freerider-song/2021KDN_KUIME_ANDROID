@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.ekn.gruzer.gaugelibrary.contract.ValueFormatter;
 import com.example.kuime.CaApplication;
@@ -13,6 +14,7 @@ import com.example.kuime.CaEngine;
 import com.example.kuime.CaResult;
 import com.example.kuime.IaResultHandler;
 import com.example.kuime.R;
+import com.example.kuime.model.CaUsage;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
@@ -28,20 +30,25 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static com.example.kuime.CaApplication.m_Context;
+
 public class ActivityFee extends AppCompatActivity implements IaResultHandler {
 
     LineChart m_LChart;
+    public ArrayList<CaUsage> m_alLineUsage = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fee);
 
+        initChart();
 
+        CaApplication.m_Engine.GetFeeInfo(this,this);
     }
 
     public void initChart()
     {
-
 
         m_LChart = findViewById(R.id.chart);
 
@@ -83,7 +90,7 @@ public class ActivityFee extends AppCompatActivity implements IaResultHandler {
         m_LChart.setExtraOffsets(5f,5f,5f,15f);
 
     }
-/*
+
     public ArrayList<String> getAreaCount(){
         int nCountUsage=m_alLineUsage.size();
         ArrayList<String> label = new ArrayList<>();
@@ -101,8 +108,7 @@ public class ActivityFee extends AppCompatActivity implements IaResultHandler {
         m_LChart.clear();
 
         ArrayList<Entry> yValsKwhCurr = new ArrayList<>();
-        ArrayList<Entry> yValsKwhHoliday = new ArrayList<>();
-        ArrayList<Entry> yValsKwhWorkday = new ArrayList<>();
+
 
 
         int nCountUsage=m_alLineUsage.size();
@@ -111,39 +117,37 @@ public class ActivityFee extends AppCompatActivity implements IaResultHandler {
 
             if(!Double.isNaN(Usage.m_dUsage)){  //double nan 체크 성공
 
-                yValsKwhCurr.add(new Entry(Usage.m_nUnit, (float)Usage.m_dUsage));
+                yValsKwhCurr.add(new Entry(i, (float)Usage.m_dUsage));
                 Log.i("ActivitySiteState" ,"fusage is "+ Usage.m_dUsage);
             }
-            yValsKwhHoliday.add(new Entry(Usage.m_nUnit, (float)Usage.m_dUsageAvgHoliday));
-            yValsKwhWorkday.add(new Entry(Usage.m_nUnit, (float)Usage.m_dUsageAvgWorkday));
 
         }
 
-        float fGroupSpace = 0.20f;
-        float fBarSpace = 0.10f;
-        float fBarWidth = 0.30f;
-        ValueFormatter vfKwhWithUnit=new ValueFormatter() {
+        ValueFormatter vfKwhWithUnit= new ValueFormatter() {
 
             @Override
-            public String getFormattedValue(float v) {
-                if (v==0) return "";
-                else return CaApplication.m_Info.m_dfKwh.format(v)+" kWh";
+            public String getFormattedValue(double value) {
+                if (value==0) return "";
+                else return CaApplication.m_Info.m_dfWon.format(value)+" 원";
             }
+
+
         };
 
         ValueFormatter vfKwh=new ValueFormatter() {
 
             @Override
-            public String getFormattedValue(float v) {
-                return CaApplication.m_Info.m_dfKwh.format(v);
+            public String getFormattedValue(double value) {
+                return CaApplication.m_Info.m_dfWon.format(value);
             }
+
         };
 
         YAxis yLeft = m_LChart.getAxisLeft();
-        yLeft.setValueFormatter(vfKwh);
+        yLeft.setValueFormatter((com.github.mikephil.charting.formatter.ValueFormatter) vfKwh);
 
         YAxis yRight = m_LChart.getAxisRight();
-        yRight.setValueFormatter(vfKwh);
+        yRight.setValueFormatter((com.github.mikephil.charting.formatter.ValueFormatter) vfKwh);
 
         XAxis xAxis = m_LChart.getXAxis();
         xAxis.setValueFormatter(new IndexAxisValueFormatter(getAreaCount()));
@@ -151,34 +155,18 @@ public class ActivityFee extends AppCompatActivity implements IaResultHandler {
         xAxis.setLabelCount(7, true); //x축 라벨 갯수 제한
 
 
-        LineDataSet setKwhCurr=new LineDataSet(yValsKwhCurr, "오늘 사용량");
+        LineDataSet setKwhCurr=new LineDataSet(yValsKwhCurr, "실시간 요금");
         setKwhCurr.setColor(getResources().getColor(R.color.chart_red));
-        setKwhCurr.setValueFormatter(vfKwhWithUnit);
+        setKwhCurr.setValueFormatter((com.github.mikephil.charting.formatter.ValueFormatter) vfKwhWithUnit);
         setKwhCurr.setMode(LineDataSet.Mode.CUBIC_BEZIER);
         setKwhCurr.setLineWidth(3f);
         setKwhCurr.setDrawCircles(false);
         setKwhCurr.setCubicIntensity(0.2f);
 
-        LineDataSet setKwhAvg;
-
-        if(CaApplication.m_Info.m_bHoliday){
-            setKwhAvg=new LineDataSet(yValsKwhHoliday, "휴일 평균 사용량");
-
-        }
-        else {
-            setKwhAvg=new LineDataSet(yValsKwhWorkday, "근무일 평균 사용량");
-
-        }
-        setKwhAvg.setColor(getResources().getColor(R.color.chart_light_gray));
-        setKwhAvg.setValueFormatter(vfKwhWithUnit);
-        setKwhAvg.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-        setKwhAvg.setLineWidth(3f);
-        setKwhAvg.setDrawCircles(false);
-        setKwhAvg.setCubicIntensity(0.2f);
 
 
 
-        LineData dataKwh = new LineData(setKwhCurr, setKwhAvg);
+        LineData dataKwh = new LineData(setKwhCurr);
         dataKwh.setValueTextSize(10f);
         dataKwh.setHighlightEnabled(false);
 
@@ -193,7 +181,7 @@ public class ActivityFee extends AppCompatActivity implements IaResultHandler {
 
     }
 
-*/
+
 
     @Override
     public void onBackPressed() {
@@ -212,68 +200,55 @@ public class ActivityFee extends AppCompatActivity implements IaResultHandler {
     }
 
     @Override
-    public void onResult(CaResult Result){
-        /*
-        case CaEngine.CB_GET_SITE_USAGE_FRONT: {
-            Log.i("ActivitySiteState", "Result of GetSiteUsageFront received...");
-            try {
-                JSONObject jo = Result.object;
+    public void onResult(CaResult Result) {
+        if (Result.object == null) {
+            Toast.makeText(m_Context, "Check Network", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-                CaApplication.m_Info.m_bHoliday = (jo.getInt("is_holiday")==1) ? true: false; // yyyyMMdd
+        switch (Result.m_nCallback) {
+            case CaEngine.GET_FEE_INFO: {
+                Log.i("ActivitySiteState", "Result of GetSiteUsageFront received...");
+                try {
+                    JSONObject jo = Result.object;
 
-                JSONArray ja=jo.getJSONArray("list_usage");
-                m_alLineUsage.clear();
-                for (int i=0; i<ja.length(); i++) {
-                    try {
-                        JSONObject joUsage = ja.getJSONObject(i);
 
-                        CaUsage Usage = new CaUsage();
-                        Usage.m_nUnit=joUsage.getInt("unit");
-                        Usage.m_strHHmm=joUsage.getString("hhmm");
-                        if(joUsage.isNull("usage")){
-                            //Usage.m_dUsage=0.0;
-                            Usage.m_dUsage=Double.NaN;
-                        }
-                        else{
-                            Usage.m_dUsage=joUsage.getDouble("usage");
+                    JSONArray ja = jo.getJSONArray("list_fee");
+                    m_alLineUsage.clear();
+                    for (int i = 0; i < ja.length(); i++) {
+                        try {
+                            JSONObject joUsage = ja.getJSONObject(i);
+
+                            CaUsage Usage = new CaUsage();
+
+                            Usage.m_strHHmm = joUsage.getString("hhmm");
+                            if (joUsage.isNull("fee")) {
+                                //Usage.m_dUsage=0.0;
+                                Usage.m_dUsage = Double.NaN;
+                            } else {
+                                Usage.m_dUsage = joUsage.getDouble("fee");
+
+                            }
+                            m_alLineUsage.add(Usage);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
 
                         }
-                        if(joUsage.isNull("usage_avg_holiday")){
-                            //Usage.m_dUsageAvgHoliday=0.0;
-                            Usage.m_dUsageAvgHoliday=Double.NaN;
-                        }
-                        else{
-                            Usage.m_dUsageAvgHoliday=joUsage.getDouble("usage_avg_holiday");
-                        }
-                        if(joUsage.isNull("usage_avg_workday")){
-                            //Usage.m_dUsageAvgWorkday=0.0;
-                            Usage.m_dUsageAvgWorkday=Double.NaN;
-                        }
-                        else{
-                            Usage.m_dUsageAvgWorkday=joUsage.getDouble("usage_avg_workday");
-                        }
-
-                        m_alLineUsage.add(Usage);
                     }
-                    catch (JSONException e) {
-                        e.printStackTrace();
 
-                    }
+                    setDataChart();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-
-                setDataChart();
-
             }
-            catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        break;
+            break;
 
-        default: {
-            Log.i("UsageYearly", "Unknown type result received : " + Result.m_nCallback);
+            default: {
+                Log.i("UsageYearly", "Unknown type result received : " + Result.m_nCallback);
+            }
+            break;
+
         }
-        break;
-*/
     }
 }
