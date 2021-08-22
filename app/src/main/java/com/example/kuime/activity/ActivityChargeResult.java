@@ -60,10 +60,10 @@ public class ActivityChargeResult extends AppCompatActivity implements IaResultH
 
         tvFee.setText(CaApplication.m_Info.m_dfWon.format(CaApplication.m_Info.nExpectedFee*CaApplication.m_Info.dReserveTimeRatio) + "원");
         tvFee.setPaintFlags(tvFee.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
-        if(CaApplication.m_Info.dReserveTimeRatio !=2){
+        if(CaApplication.m_Info.nReserveType !=2){
             tvFinalFee.setText(CaApplication.m_Info.m_dfWon.format(CaApplication.m_Info.nExpectedFee* CaApplication.m_Info.dReserveTimeRatio * 0.8) +"원");
         }
-        else{
+        else {
             CaApplication.m_Info.nPoint = CaApplication.m_Info.nPoint + Integer.parseInt(String.valueOf(Math.round(CaApplication.m_Info.dReserveTimeRatio*CaApplication.m_Info.nExpectedFee / 0.8)));
             tvFinalFee.setText(CaApplication.m_Info.m_dfWon.format(CaApplication.m_Info.dReserveTimeRatio*CaApplication.m_Info.nExpectedFee / 0.8) +"원");
         }

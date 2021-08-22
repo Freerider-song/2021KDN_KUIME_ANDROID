@@ -175,7 +175,7 @@ public class ActivityFee extends AppCompatActivity implements IaResultHandler {
         XAxis xAxis = m_LChart.getXAxis();
         xAxis.setValueFormatter(new IndexAxisValueFormatter(getAreaCount()));
         //xAxis.setLabelCount(m_alLineUsage.size());
-        xAxis.setLabelCount(7, true); //x축 라벨 갯수 제한
+        xAxis.setLabelCount(8, true); //x축 라벨 갯수 제한
 
 
         LineDataSet setKwhCurr=new LineDataSet(yValsKwhCurr, "실시간 요금");

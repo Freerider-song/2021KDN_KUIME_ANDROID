@@ -128,12 +128,13 @@ public class ActivityMap extends AppCompatActivity implements IaResultHandler, O
 
 
         MarkerOptions markerOptions = new MarkerOptions();
-        LatLng JEJU = new LatLng(33.505, 126.4681157);
+        LatLng JEJU = new LatLng(33.495, 126.4711157);
+        /*
         markerOptions.position(JEJU);
         markerOptions.title("제주 애월 1 충전소");
         markerOptions.snippet("기본 위치");
         markerOptions.icon(BitmapDescriptorFactory.fromBitmap(v2gMarker));
-        mMap.addMarker(markerOptions);
+        mMap.addMarker(markerOptions);*/
 
         Log.i("MAP", "마커설정시 alStation 길이 " + alStation.size());
 
