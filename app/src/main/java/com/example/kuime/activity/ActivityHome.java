@@ -167,6 +167,15 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
 
                 //m_Pref.setValue(PREF_CURRENT_CAP, nCurrentCap);
             }
+            if(CaApplication.m_Info.dReserveTimeRatio >=1){
+                if(CaApplication.m_Info.nReserveType !=2){
+                    nCurrentCap = 100;
+                }
+                else{ //방전일 경우
+                    nCurrentCap = CaApplication.m_Info.nMinCapacity;
+                }
+                CaApplication.m_Info.nCurrentCap = nCurrentCap;
+            }
 
             tvCurrentCap.setText(Integer.toString(nCurrentCap)+ "%");
             if(nCurrentCap <20) {
@@ -185,6 +194,33 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
                 ivBattery.setImageDrawable(getDrawable(R.drawable.battery5));
             }
         }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        AlertDialog.Builder dlg = new AlertDialog.Builder(ActivityHome.this);
+        dlg.setTitle("경고"); //제목
+        dlg.setMessage("앱을 종료하시겠습니까?"); // 메시지
+        //dlg.setIcon(R.drawable.deum); // 아이콘 설정
+//                버튼 클릭시 동작
+
+        dlg.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        dlg.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // kill app
+                finishAffinity();
+                System.runFinalization();
+                System.exit(0);
+            }
+        });
+
+        dlg.show();
 
     }
 

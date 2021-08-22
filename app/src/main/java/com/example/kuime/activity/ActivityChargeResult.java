@@ -58,7 +58,7 @@ public class ActivityChargeResult extends AppCompatActivity implements IaResultH
 
         tvFee.setText(CaApplication.m_Info.m_dfWon.format(CaApplication.m_Info.nExpectedFee) + "원");
         tvFee.setPaintFlags(tvFee.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
-        tvFinalFee.setText(CaApplication.m_Info.m_dfWon.format(CaApplication.m_Info.nExpectedFee / 0.8) +"원");
+        tvFinalFee.setText(CaApplication.m_Info.m_dfWon.format(CaApplication.m_Info.nExpectedFee * 0.8) +"원");
 
     }
 

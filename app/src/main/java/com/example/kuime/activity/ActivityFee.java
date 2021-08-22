@@ -6,13 +6,16 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.ekn.gruzer.gaugelibrary.contract.ValueFormatter;
 import com.example.kuime.CaApplication;
 import com.example.kuime.CaEngine;
 import com.example.kuime.CaResult;
+import com.example.kuime.EgYearMonthDayPicker;
 import com.example.kuime.IaResultHandler;
+import com.example.kuime.MyMarkerView;
 import com.example.kuime.R;
 import com.example.kuime.model.CaUsage;
 import com.github.mikephil.charting.charts.LineChart;
@@ -28,7 +31,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import static com.example.kuime.CaApplication.m_Context;
 
@@ -36,11 +41,22 @@ public class ActivityFee extends AppCompatActivity implements IaResultHandler {
 
     LineChart m_LChart;
     public ArrayList<CaUsage> m_alLineUsage = new ArrayList<>();
+    private EgYearMonthDayPicker m_dlgYearMonthDayPicker;
+
+    Button btnSelectTime;
+    String chosenDate;
+
+    SimpleDateFormat mFormat = new SimpleDateFormat("yyyy-MM-dd");
+    SimpleDateFormat myyyyMMddFormat = new SimpleDateFormat("yyyyMMdd");
+    SimpleDateFormat mHHmmFormat = new SimpleDateFormat("HH:mm");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fee);
+
+        Calendar calToday = Calendar.getInstance();
+        chosenDate = myyyyMMddFormat.format(calToday.getTime());
 
         initChart();
 
@@ -53,14 +69,16 @@ public class ActivityFee extends AppCompatActivity implements IaResultHandler {
         m_LChart = findViewById(R.id.chart);
 
         m_LChart.getDescription().setEnabled(false);
-        m_LChart.setMaxVisibleValueCount(60);
+        m_LChart.setMaxVisibleValueCount(100);
         m_LChart.setDrawGridBackground(false);
-        m_LChart.animateY(1000);
+        m_LChart.animateY(1500);
 
         m_LChart.setScaleEnabled(true);
-        m_LChart.setPinchZoom(true);
-        m_LChart.setDoubleTapToZoomEnabled(true);
-        m_LChart.setTouchEnabled(false);
+        m_LChart.setPinchZoom(false);
+        m_LChart.setDoubleTapToZoomEnabled(false);
+        m_LChart.setTouchEnabled(true);
+
+
 
 
         //Typeface tf2 = Typeface.createFromAsset(getAssets(), StringUtil.getString(this, R.string.font_open_sans_regular));
@@ -97,7 +115,8 @@ public class ActivityFee extends AppCompatActivity implements IaResultHandler {
         for (int i = 0; i <nCountUsage; i++) {
             CaUsage Usage=m_alLineUsage.get(i);
 
-            label.add((Usage.m_strHHmm).substring(0,2) +"시");
+            //label.add((Usage.m_strHHmm).substring(0,2) +"시");
+            label.add(mHHmmFormat.format(Usage.m_strHHmm));
         };
         return label;
     }
@@ -108,8 +127,7 @@ public class ActivityFee extends AppCompatActivity implements IaResultHandler {
         m_LChart.clear();
 
         ArrayList<Entry> yValsKwhCurr = new ArrayList<>();
-
-
+        double maxYValue = 0;
 
         int nCountUsage=m_alLineUsage.size();
         for (int i=0; i<nCountUsage; i++) {
@@ -118,6 +136,9 @@ public class ActivityFee extends AppCompatActivity implements IaResultHandler {
             if(!Double.isNaN(Usage.m_dUsage)){  //double nan 체크 성공
 
                 yValsKwhCurr.add(new Entry(i, (float)Usage.m_dUsage));
+                if(maxYValue <= Usage.m_dUsage){
+                    maxYValue = Usage.m_dUsage;
+                }
                 Log.i("ActivitySiteState" ,"fusage is "+ Usage.m_dUsage);
             }
 
@@ -144,10 +165,12 @@ public class ActivityFee extends AppCompatActivity implements IaResultHandler {
         };
 
         YAxis yLeft = m_LChart.getAxisLeft();
-        yLeft.setValueFormatter((com.github.mikephil.charting.formatter.ValueFormatter) vfKwh);
+       // yLeft.setValueFormatter(vfKwh);
 
         YAxis yRight = m_LChart.getAxisRight();
-        yRight.setValueFormatter((com.github.mikephil.charting.formatter.ValueFormatter) vfKwh);
+       // yRight.setValueFormatter(vfKwh);
+
+        yLeft.setAxisMaximum((float)maxYValue + 50f);
 
         XAxis xAxis = m_LChart.getXAxis();
         xAxis.setValueFormatter(new IndexAxisValueFormatter(getAreaCount()));
@@ -157,20 +180,22 @@ public class ActivityFee extends AppCompatActivity implements IaResultHandler {
 
         LineDataSet setKwhCurr=new LineDataSet(yValsKwhCurr, "실시간 요금");
         setKwhCurr.setColor(getResources().getColor(R.color.chart_red));
-        setKwhCurr.setValueFormatter((com.github.mikephil.charting.formatter.ValueFormatter) vfKwhWithUnit);
-        setKwhCurr.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+        //setKwhCurr.setValueFormatter((com.github.mikephil.charting.formatter.ValueFormatter) vfKwhWithUnit);
+        //setKwhCurr.setMode(LineDataSet.Mode.CUBIC_BEZIER);
         setKwhCurr.setLineWidth(3f);
         setKwhCurr.setDrawCircles(false);
         setKwhCurr.setCubicIntensity(0.2f);
 
-
-
+        setKwhCurr.setDrawValues(false);
 
         LineData dataKwh = new LineData(setKwhCurr);
         dataKwh.setValueTextSize(10f);
-        dataKwh.setHighlightEnabled(false);
+        dataKwh.setHighlightEnabled(true);
 
-        m_LChart.setData(dataKwh);
+        MyMarkerView marker = new MyMarkerView(this,R.layout.markerview);
+        marker.setChartView(m_LChart);
+        m_LChart.setMarker(marker);
+
         m_LChart.getXAxis().setAxisMinimum(0);
         m_LChart.getXAxis().setAxisMaximum(nCountUsage);
         m_LChart.getAxisLeft().setAxisMinimum(0f);
@@ -178,7 +203,7 @@ public class ActivityFee extends AppCompatActivity implements IaResultHandler {
         // m_LChart.groupBars(0.0f, fGroupSpace, fBarSpace);
 
         m_LChart.getLegend().setEnabled(true);
-
+        m_LChart.setData(dataKwh);
     }
 
 
@@ -195,7 +220,45 @@ public class ActivityFee extends AppCompatActivity implements IaResultHandler {
             }
             break;
 
+            case R.id.btn_month_day_picker:{
+                View.OnClickListener LsConfirmYes=new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v) {
+                        m_dlgYearMonthDayPicker.dismiss();
 
+                        int nYear = m_dlgYearMonthDayPicker.m_DatePicker.getYear();
+                        int nMonth = m_dlgYearMonthDayPicker.m_DatePicker.getMonth() + 1;
+                        int nDay = m_dlgYearMonthDayPicker.m_DatePicker.getDayOfMonth();
+
+                        Log.i("YearMonthDayPicker", "year="+nYear+", month="+nMonth+", day="+nDay);
+
+                        //명령어
+                        String strYear = Integer.toString(nYear);
+                        String strMonth =Integer.toString(nMonth);
+                        if(nMonth <=9) strMonth="0"+strMonth;
+                        String strDay = Integer.toString(nDay);
+                        if(nDay <=9) strDay="0"+strDay;
+
+                        String date = strMonth+"월 "+strDay+"일";
+                        btnSelectTime = (Button) findViewById(R.id.btn_month_day_picker);
+                        btnSelectTime.setText(date);
+                        chosenDate = strYear+strMonth+strDay;
+
+                        CaApplication.m_Engine.GetFeeInfo(ActivityFee.this,ActivityFee.this);
+                    }
+
+                };
+                View.OnClickListener LsConfirmNo = new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v) {
+                        Log.i("ActivityCandidate", "No button clicked...");
+                        m_dlgYearMonthDayPicker.dismiss();
+                    }
+                };
+                m_dlgYearMonthDayPicker=new EgYearMonthDayPicker(this, "조회할 날짜를 선택하세요",LsConfirmYes,LsConfirmNo);
+                m_dlgYearMonthDayPicker.show();
+            }
+            break;
         }
     }
 
@@ -213,7 +276,7 @@ public class ActivityFee extends AppCompatActivity implements IaResultHandler {
                     JSONObject jo = Result.object;
 
 
-                    JSONArray ja = jo.getJSONArray("list_fee");
+                    JSONArray ja = jo.getJSONArray("fee_history");
                     m_alLineUsage.clear();
                     for (int i = 0; i < ja.length(); i++) {
                         try {
@@ -221,15 +284,22 @@ public class ActivityFee extends AppCompatActivity implements IaResultHandler {
 
                             CaUsage Usage = new CaUsage();
 
-                            Usage.m_strHHmm = joUsage.getString("hhmm");
+                            Usage.m_strHHmm = CaApplication.m_Info.parseDate(joUsage.getString("datetime"));
                             if (joUsage.isNull("fee")) {
                                 //Usage.m_dUsage=0.0;
                                 Usage.m_dUsage = Double.NaN;
-                            } else {
+                            }
+                            else if(joUsage.getDouble("fee")==-1){
+                                Usage.m_dUsage = 0.0;
+                            }
+                            else {
                                 Usage.m_dUsage = joUsage.getDouble("fee");
 
                             }
-                            m_alLineUsage.add(Usage);
+                            if(chosenDate.equals(myyyyMMddFormat.format(Usage.m_strHHmm))){
+                                m_alLineUsage.add(Usage);
+                            }
+
                         } catch (JSONException e) {
                             e.printStackTrace();
 
