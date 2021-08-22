@@ -55,6 +55,22 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
 
     String strYearMonth;
 
+    public void calRatio(){
+        if(CaApplication.m_Info.dtStart != null && CaApplication.m_Info.dtEnd != null){
+            long calDate = CaApplication.m_Info.dtEnd.getTime() - CaApplication.m_Info.dtStart.getTime();
+            long calNow = now-CaApplication.m_Info.dtStart.getTime();
+            if(calNow>=0){
+                CaApplication.m_Info.dReserveTimeRatio = calNow / (double) calDate;
+                Log.d("HOME", "ReserveTimeRatio is " + CaApplication.m_Info.dReserveTimeRatio);
+                if(mNow.before(CaApplication.m_Info.dtEnd)){
+                    CaApplication.m_Info.dtStart = mNow; //시작시간을 현재시간으로 바꿔주어서 나중에 다시 이 화면에 들어오게 되었을 때 RTRatio 가 현실 반영하게끔 바꿔줌
+                }
+            }
+
+        }
+        nCurrentCap = CaApplication.m_Info.nCurrentCap; //nCurrentCap = 45
+        Log.i("HOME", "current cap is " +nCurrentCap + "ratio is " + CaApplication.m_Info.dReserveTimeRatio);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,22 +82,7 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
         now = System.currentTimeMillis();
         mNow = new Date(now);
 
-        if(CaApplication.m_Info.dtStart != null && CaApplication.m_Info.dtEnd != null){
-            long calDate = CaApplication.m_Info.dtEnd.getTime() - CaApplication.m_Info.dtStart.getTime();
-            long calNow = now-CaApplication.m_Info.dtStart.getTime();
-            if(calNow>=0){
-                CaApplication.m_Info.dReserveTimeRatio = calNow / (double) calDate;
-                Log.d("HOME", "ReserveTimeRatio is " + CaApplication.m_Info.dReserveTimeRatio);
-                if(mNow.before(CaApplication.m_Info.dtEnd)){
-                    CaApplication.m_Info.dtStart = mNow; //시작시간을 현재시간으로 바꿔주어서 나중에 다시 이 화면에 들어오게 되었을 때 RTRatio 가 현실 반영하게끔 바꿔줌
-                }
 
-            }
-
-        }
-
-        nCurrentCap = CaApplication.m_Info.nCurrentCap; //nCurrentCap = 45
-        Log.i("HOME", "current cap is " +nCurrentCap);
 
         tvName = findViewById(R.id.tv_name);
         tvStation = findViewById(R.id.tv_station);
@@ -97,6 +98,8 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
         tvCar.setText(CaApplication.m_Info.strCarModel);
         //btnMap.findViewById(R.id.btn_map);
 
+        calRatio();
+
     }
 
     @Override
@@ -106,6 +109,8 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
 
         CaApplication.m_Engine.GetHomeInfo(CaApplication.m_Info.strId, this,this);
         CaApplication.m_Engine.GetChargeHistory(CaApplication.m_Info.strId, this,this);
+
+
 
     }
 
@@ -372,6 +377,7 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
                     }
 
                     viewSetting();
+                    calRatio();
 
 
                 } catch (JSONException e) {
@@ -414,7 +420,8 @@ public class ActivityHome extends AppCompatActivity implements IaResultHandler {
                         Log.i("ChargeHistory" , "alHistory size" + alHistory.size());
 
                     }
-                    tvMargin.setText(CaApplication.m_Info.m_dfWon.format(alHistory.size() * 4562) +" 원을 벌었어요");
+                    tvMargin.setText(CaApplication.m_Info.m_dfWon.format(alHistory.size() * 1562) +" 원을 벌었어요");
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();

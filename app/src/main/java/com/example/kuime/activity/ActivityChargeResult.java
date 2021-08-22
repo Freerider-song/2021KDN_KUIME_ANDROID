@@ -56,9 +56,18 @@ public class ActivityChargeResult extends AppCompatActivity implements IaResultH
             tvTitle.setText("쿠이미가 똑똑한 \n 충·방전을 완료했어요");
         }
 
-        tvFee.setText(CaApplication.m_Info.m_dfWon.format(CaApplication.m_Info.nExpectedFee) + "원");
+        if(CaApplication.m_Info.dReserveTimeRatio >1) CaApplication.m_Info.dReserveTimeRatio = 1;
+
+        tvFee.setText(CaApplication.m_Info.m_dfWon.format(CaApplication.m_Info.nExpectedFee*CaApplication.m_Info.dReserveTimeRatio) + "원");
         tvFee.setPaintFlags(tvFee.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
-        tvFinalFee.setText(CaApplication.m_Info.m_dfWon.format(CaApplication.m_Info.nExpectedFee * 0.8) +"원");
+        if(CaApplication.m_Info.dReserveTimeRatio !=2){
+            tvFinalFee.setText(CaApplication.m_Info.m_dfWon.format(CaApplication.m_Info.nExpectedFee* CaApplication.m_Info.dReserveTimeRatio * 0.8) +"원");
+        }
+        else{
+            CaApplication.m_Info.nPoint = CaApplication.m_Info.nPoint + Integer.parseInt(String.valueOf(Math.round(CaApplication.m_Info.dReserveTimeRatio*CaApplication.m_Info.nExpectedFee / 0.8)));
+            tvFinalFee.setText(CaApplication.m_Info.m_dfWon.format(CaApplication.m_Info.dReserveTimeRatio*CaApplication.m_Info.nExpectedFee / 0.8) +"원");
+        }
+
 
     }
 

@@ -27,6 +27,9 @@ public class ActivityMyPage extends AppCompatActivity {
 
         tvVersion = findViewById(R.id.tv_version);
         tvVersion.setText(getVersion());
+
+        TextView tvPoint = findViewById(R.id.tv_point);
+        tvPoint.setText("P " + CaApplication.m_Info.nPoint);
     }
 
     private String getVersion()

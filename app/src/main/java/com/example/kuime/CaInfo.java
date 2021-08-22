@@ -50,6 +50,7 @@ public class CaInfo {
     public Date m_dtModified=null;
     public Date m_dtChangePassword =null;
 
+    public int nPoint = 0;
 
     //
     // GetSaveResult

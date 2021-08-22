@@ -153,7 +153,7 @@ public class ActivityChargeHistory extends AppCompatActivity implements IaResult
         tvSavingFee = findViewById(R.id.tv_saving_fee);
         listView = findViewById(R.id.lv_charge_history);
 
-        tvSavingFee.setText("+"+CaApplication.m_Info.m_dfWon.format(alHistory.size() * 4562) + "원을\n아꼈어요!");
+        tvSavingFee.setText("+"+CaApplication.m_Info.m_dfWon.format(alHistory.size() * 1562) + "원을\n아꼈어요!");
 
         m_ChargeHistoryAdapter= new ChargeHistoryAdapter();
 
@@ -249,7 +249,7 @@ public class ActivityChargeHistory extends AppCompatActivity implements IaResult
                         }
                         Log.i("ChargeHistory" , "alHistory size" + alHistory.size());
 
-                        tvSavingFee.setText("+"+CaApplication.m_Info.m_dfWon.format(alHistory.size() * 4562) + "원을\n아꼈어요!");
+                        tvSavingFee.setText("+"+CaApplication.m_Info.m_dfWon.format(alHistory.size() * 1562) + "원을\n아꼈어요!");
                         m_ChargeHistoryAdapter.notifyDataSetChanged();
                     }
 
